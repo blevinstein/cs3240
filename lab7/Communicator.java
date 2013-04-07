@@ -13,7 +13,7 @@ public class Communicator implements Runnable {
     private boolean connected;
 
     // Return true if connected
-    public void isConnected() {
+    public boolean isConnected() {
         return connected;
     }
 
@@ -37,8 +37,9 @@ public class Communicator implements Runnable {
         return messageQueue.remove();
     }
 
+    // Send message to base station
     public void sendMessage(Message m) {
-        // TODO: send message
+        os.write(m.toString().getBytes());
     }
 
     // Main thread
@@ -47,15 +48,19 @@ public class Communicator implements Runnable {
         byte[] byteBuffer = new byte[1024];
 
         connection = Bluetooth.waitForConnection();
+        connected = true;
         is = connection.openDataInputStream();
         os = connection.openDataOutputStream();
         terminateFlag = false;
 
         while(!terminateFlag) {
+            // read into byte[] buffer
             int bytesRead = is.read(byteBuffer);
             if(bytesRead > 0) {
+                // transfer from byte[] into StringBuffer
                 stringBuffer.append(new String(byteBuffer, 0, bytesRead));
                 // check for }
+                // if found, this suggests that we just finished receiving a full message
                 int endChar = stringBuffer.indexOf("}");
                 if(endChar != -1) {
                     // check for matching {
@@ -71,7 +76,7 @@ public class Communicator implements Runnable {
                     } else {
                         // delete malformed input from the buffer
                         stringBuffer.replace(0, endChar+1, "");
-                        // TODO: log message about malformed input
+                        // TODO: log message about malformed input, send error response back to base station
                     }
                 }
             }
@@ -81,5 +86,6 @@ public class Communicator implements Runnable {
         is.close();
         os.close();
         connection.close();
+        connected = false;
     }
 }
