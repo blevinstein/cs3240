@@ -12,7 +12,7 @@ public class Motor extends NXTRegulatedMotor {
 	}
 	
 	public void move() {
-		
+		this.forward();
 	}
 	
 	public void rotate(float angle) {
