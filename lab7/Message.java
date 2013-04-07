@@ -19,10 +19,11 @@ public class Message {
         map = new HashMap<String, String>();
     }
 
-    private long checksumOf(String s) {
-        CRC32 cs = new CRC32();
-        cs.update(s.getBytes());
-        return cs.getValue();
+    private int checksumOf(String s) {
+        int cs = 0;
+        for(int i=0; i<s.length(); i++)
+            cs += s.charAt(i);
+        return ~cs;
     }
 
     // construct the original message from a string
@@ -35,8 +36,8 @@ public class Message {
         // get sequence number
         seqNum = Integer.parseInt(m.group(0));
         // calculate and compare checksum
-        long checksum = checksumOf(m.group(0) + m.group(1));
-        long messageChecksum = Long.parseLong(m.group(2), 16);
+        int checksum = checksumOf(m.group(0) + m.group(1));
+        int messageChecksum = Integer.parseInt(m.group(2));
         if(checksum != messageChecksum)
             return; // TODO: error here
         // parse body
