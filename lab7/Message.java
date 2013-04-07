@@ -30,7 +30,7 @@ public class Message {
     // construct the original message from a string
     public Message(String s) {
         pairs = new ArrayList<String[]>();
-        Pattern p = new Pattern("^\{(\d)(.+)\|(.+)\}$");
+        Pattern p = new Pattern("^\\{(\\d)(.+)\\|(.+)\\}$");
         Matcher m = p.matcher(s);
         if(!m.matches() || m.groupCount() < 3)
             return; // TODO: error here

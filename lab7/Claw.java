@@ -31,7 +31,4 @@ public class Claw {
 		motor.rotate(degrees / GEAR_RATIO);
 		angle = motor.getTachoCount();
 	}
-	
-	
-	
 }
