@@ -4,26 +4,47 @@ import lejos.pc.comm.*;
 
 public class Controller {
     Communicator comm;
-    MotionController motionController
-
-    public static void main(String[] args) {
+    Claw claw;
+    Movement movement;
+    Telemetry telemetry;
+    
+    public Controller(MotorPort clawPort,
+    				  MotorPort leftport,
+    				  MotorPort rightport,
+    				  SensorPort light,
+    				  SensorPort touch,
+    				  SensorPort ultra,
+    				  SensorPort sound) {
+    	claw = new Claw(clawPort);
+    	movement = new Movement(leftPort, rightPort);
+    	telemetry = new Telemetry(light, touch, ultra, sound);
+    }
+   
+    public static void mainLoop() {
         comm = new Communicator();
         motionController = new MotionController();
-        boolean connected = false;
-
+       
         comm.start();
 
         while (true) {
-            String message;
-            if (comm.hasMessage()) {
-                message = comm.getMessage();
+            Message message;
+            
+            if (!comm.hasMessage() && comm.isConnected()) {
+            	Thread.sleep(20);
+            	continue;
             }
-            motionController.act(message);
-            act(message);
+            if (!comm.isConnected()) {
+            	//autopilot
+            }
+            if (comm.hasMesssage()) {
+            	message = comm.getMessage();
+            	
+            	// parse message
+            	if (message.command().equals("query")) {
+            		// get telemetry data, construct message, comm.send() it
+            	}
+            
+            }
         }
-    }
-
-    private void act(String message) {
-        // if message == "query", send sensory data via comm
     }
 }

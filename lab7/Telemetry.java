@@ -39,9 +39,9 @@ public class Telemetry {
 	public List<String> getTelemetryData(){
 		List<String> telemetry_data = new ArrayList<String>();
 		telemetry_data.add(Integer.toString(getLight()));
+		telemetry_data.add(Integer.toString(getSound()));
 		telemetry_data.add(Boolean.toString(getTouch()));
 		telemetry_data.add(Integer.toString(getUltrasonic()));
-		telemetry_data.add(Integer.toString(getSound()));
 		return telemetry_data;
 	}
 	
