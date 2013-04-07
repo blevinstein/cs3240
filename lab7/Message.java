@@ -1,6 +1,4 @@
 import java.util.*;
-import java.util.regex.*;
-import java.util.zip.*;
 
 /*
  * Message format:
@@ -29,27 +27,28 @@ public class Message {
 
     // construct the original message from a string
     public Message(String s) {
+        // check for correct delimiters
+        assert(s.charAt(0) == '{' && s.charAt(s.length()-1) == '}');
+        // parse sequence number
+        seqNum = Integer.parseInt(s.charAt(1)+"");
+        // parse body of message
         pairs = new ArrayList<String[]>();
-        Pattern p = new Pattern("^\\{(\\d)(.+)\\|(.+)\\}$");
-        Matcher m = p.matcher(s);
-        if(!m.matches() || m.groupCount() < 3)
-            return; // TODO: error here
-        // get sequence number
-        seqNum = Integer.parseInt(m.group(0));
-        // calculate and compare checksum
-        int checksum = checksumOf(m.group(0) + m.group(1));
-        int messageChecksum = Integer.parseInt(m.group(2));
-        if(checksum != messageChecksum)
-            return; // TODO: error here
-        // parse body
-        String trimmed = m.group(1);
-        String[] split = trimmed.split("&");
-        for(int i=0; i<split.length; i++) {
-            int colon = split[i].indexOf(":");
+        // parse and compare checksum
+        int bar = s.indexOf('|');
+        assert(bar != -1);
+        String pairString = s.substring(2,bar);
+        int checksum = checksumOf(seqNum + pairString);
+        int messageChecksum = Integer.parseInt(s.substring(bar+1,s.length()-1));
+        assert(checksum == messageChecksum);
+        // parse pairs from body
+        StringTokenizer st = new StringTokenizer(pairString, "&");
+        while(st.hasMoreTokens()) {
+            String pair = st.nextToken();
+            int colon = pair.indexOf(':');
             if(colon == -1)
-                pairs.add(new String[]{split[i], null});
+                pairs.add(new String[]{pair, null});
             else
-                pairs.add(new String[]{split[i].substring(0, colon), split[i].substring(colon+1)});
+                pairs.add(new String[]{pair.substring(0, colon), pair.substring(colon+1)});
         }
     }
 

@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 import lejos.nxt.*;
-import lejox.nxt.comm.*;
+import lejos.nxt.comm.*;
 
 public class Communicator implements Runnable {
     private Queue<Message> messageQueue;
@@ -34,7 +34,7 @@ public class Communicator implements Runnable {
 
     // Retrieve oldest message in queue
     public Message getMessage() {
-        return messageQueue.remove();
+        return (Message)messageQueue.pop();
     }
 
     // Send message to base station
@@ -67,7 +67,7 @@ public class Communicator implements Runnable {
                     int startChar = stringBuffer.indexOf("{");
                     if(startChar != -1 && startChar < endChar) {
                         // parse the message and add it to the queue
-                        messageQueue.offer(new Message(stringBuffer.substring(startChar, endChar+1)));
+                        messageQueue.push(new Message(stringBuffer.substring(startChar, endChar+1)));
                         stringBuffer.replace(startChar, endChar+1, "");
                         // clean out beginning of buffer
                         if(startChar > 0) {
