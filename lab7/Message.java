@@ -12,12 +12,13 @@ import java.util.zip.*;
 
 public class Message {
     private int seqNum;
-    private ArrayList<String[]> pairs;
+    public ArrayList<String[]> pairs;
     
 
     // construct empty message
-    public Message() {
+    public Message(int seqNum) {
         pairs = new ArrayList<String[]>();
+        this.seqNum = seqNum;
     }
 
     private int checksumOf(String s) {
@@ -83,7 +84,7 @@ public class Message {
         }
         checksum = checksumOf(b.toString());
         b.append('|' + checksum + '}');
-        String fullmessage = "{" + b.toString();
+        String fullmessage = "{" + seqNum + b.toString();
         return fullmessage;
     }
 }

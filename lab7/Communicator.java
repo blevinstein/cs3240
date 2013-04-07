@@ -44,7 +44,7 @@ public class Communicator implements Runnable {
 
     // Main thread
     public void run() {
-        StringBuffer stringBuffer = new StringBuffer();
+        String stringBuffer = "";
         byte[] byteBuffer = new byte[1024];
 
         connection = Bluetooth.waitForConnection();
@@ -56,9 +56,9 @@ public class Communicator implements Runnable {
         while(!terminateFlag) {
             // read into byte[] buffer
             int bytesRead = is.read(byteBuffer);
-            if(bytesRead > 0) {
+            if (bytesRead > 0) {
                 // transfer from byte[] into StringBuffer
-                stringBuffer.append(new String(byteBuffer, 0, bytesRead));
+                stringBuffer += new String(byteBuffer, 0, bytesRead)
                 // check for }
                 // if found, this suggests that we just finished receiving a full message
                 int endChar = stringBuffer.indexOf("}");
@@ -67,16 +67,18 @@ public class Communicator implements Runnable {
                     int startChar = stringBuffer.indexOf("{");
                     if(startChar != -1 && startChar < endChar) {
                         // parse the message and add it to the queue
-                        messageQueue.offer(new Message(stringBuffer.substring(startChar, endChar+1)));
-                        stringBuffer.replace(startChar, endChar+1, "");
-                        // clean out beginning of buffer
-                        if(startChar > 0) {
-                            stringBuffer.replace(0, startChar, "");
-                        }
+                        messageRead = new Message(stringBuffer.substring(startChar, endChar+1));
+                        messageQueue.offer(messageRead);
+                        Message ack = new Message(messageRead.seqNum);
+                        ack.pairs.add(new String[]{"ack", messageRead.get(0)[0]});
+                        sendMessage(ack);
+                    }
+
+                    // clean command up to } off stringBuffer
+                    if (endChar == stringBuffer.length() - 1) {
+                      stringBuffer = "";
                     } else {
-                        // delete malformed input from the buffer
-                        stringBuffer.replace(0, endChar+1, "");
-                        // TODO: log message about malformed input, send error response back to base station
+                      stringBuffer = stringBuffer.substring(endChar + 1);
                     }
                 }
             }
