@@ -81,7 +81,10 @@ public class Message {
             if(keys.hasNext())
                 b.append('&');
         }
-        return b.toString();
+        checksum = checksumOf(b.toString());
+        b.append('|' + checksum + '}');
+        String fullmessage = "{" + b.toString();
+        return fullmessage;
     }
 }
 
