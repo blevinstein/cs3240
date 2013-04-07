@@ -1,4 +1,4 @@
-run: Controller.nxj
+run: OnboardSystem.nxj
 	nxjupload -r -b -d ${NXT} Controller.nxj
 
 %.class: %.java
@@ -6,6 +6,9 @@ run: Controller.nxj
 
 %.nxj: %.class
 	nxjlink -o $@ $(patsubst %.class,%,$<)
+
+clean:
+	rm -rf *.nxj *.class
 
 RobotCommTest.class: RobotCommTest.java
 	nxjc RobotCommTest.java

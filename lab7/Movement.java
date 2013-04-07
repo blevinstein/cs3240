@@ -61,7 +61,7 @@ public class Movement {
 		return (int)(LEFT_ROTATION * left_motor.getSpeed());
 	}
 	public int getRightSpeed(){
-		return (int)(RIGHT_ROTATION * right_motor.setSpeed());
+		return (int)(RIGHT_ROTATION * right_motor.getSpeed());
 	}
 	public MotorPort getLeftMotorPort(){
 		return left_motor_port;

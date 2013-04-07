@@ -39,7 +39,11 @@ public class Communicator implements Runnable {
 
     // Send message to base station
     public void sendMessage(Message m) {
-        os.write(m.toString().getBytes());
+        try{
+            os.write(m.toString().getBytes());
+        } catch(IOException e) {
+            // TODO: not fail silently
+        }
     }
 
     // Main thread
@@ -55,8 +59,13 @@ public class Communicator implements Runnable {
 
         while(!terminateFlag) {
             // read into byte[] buffer
-            int bytesRead = is.read(byteBuffer);
-            if (bytesRead > 0) {
+            int bytesRead;
+            try {
+                bytesRead = is.read(byteBuffer);
+            } catch (IOException e) {
+                bytesRead = 0;
+            }
+            if(bytesRead > 0) {
                 // transfer from byte[] into StringBuffer
                 stringBuffer += new String(byteBuffer, 0, bytesRead)
                 // check for }
@@ -85,8 +94,12 @@ public class Communicator implements Runnable {
         }
 
         // disconnect
-        is.close();
-        os.close();
+        try {
+            is.close();
+            os.close();
+        } catch(IOException e) {
+            // TODO: not fail silently
+        }
         connection.close();
         connected = false;
     }

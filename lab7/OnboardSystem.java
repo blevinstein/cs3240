@@ -15,8 +15,7 @@ public class OnboardSystem {
 	
 	public static final String[] commands = {INIT, MOVE, TURN, CLAW, STOP, QUERY, QUIT, ACK};
 	
-	
-	private Controller controller;
+	private static Controller controller;
 	
 	public static void main(String[] args){
 		
@@ -25,31 +24,10 @@ public class OnboardSystem {
 		Button.waitForPress();
 	
 		System.out.println("Initializing..........");
-		controller = new Controller(MotorPort.A, MotorPort.B, MotorPort.C, SensorPort.3, SensorPort.1, SensorPort.2, SensorPort.4);
+		controller = new Controller(MotorPort.A, MotorPort.B, MotorPort.C, SensorPort.S3, SensorPort.S1, SensorPort.S2, SensorPort.S4);
 		
 		//START EXECUTION OF ONBOARD SYSTEM
 		controller.mainLoop();
 		
 	}
-	
-
-	public Claw getClaw(){
-		return claw;
-	}
-	public void setClaw(Claw the_claw){
-		claw = the_claw;
-	}
-	public Telemetry getSensors(){
-		return sensors;
-	}
-	public void setSensors(Telemetry the_sensors){
-		sensors = the_sensors;
-	}
-	public Movement getMotors(){
-		return motors;
-	}
-	public void setMotors(Movement the_motors){
-		motors = the_motors;
-	}
-
 }

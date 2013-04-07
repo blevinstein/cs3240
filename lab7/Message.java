@@ -78,10 +78,10 @@ public class Message {
             } else {
                 b.append(k);
             }
-            if(keys.hasNext())
+            if(pairsIterator.hasNext())
                 b.append('&');
         }
-        checksum = checksumOf(b.toString());
+        int checksum = checksumOf(b.toString());
         b.append('|' + checksum + '}');
         String fullmessage = "{" + seqNum + b.toString();
         return fullmessage;
