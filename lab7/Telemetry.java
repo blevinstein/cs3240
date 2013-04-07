@@ -1,5 +1,5 @@
 import lejos.nxt.*;
-import java.util.ArrayList;
+import java.util.*;
 
 //class that is capable of reading all of the TELEMETRY data from the robot.
 //provides getter and setters for ports, as well as getters for the values
