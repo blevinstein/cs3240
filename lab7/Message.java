@@ -64,8 +64,9 @@ public class Message {
 
     // serialize message for transmission
     public String toString() {
-        StringBuffer b = new StringBuffer("{");
+        StringBuffer b = new StringBuffer();
         Iterator<String> keys = map.keySet().iterator();
+        int checksum;
         while(keys.hasNext()) {
             String k = keys.next();
             String v = map.get(k);
@@ -79,6 +80,9 @@ public class Message {
             if(keys.hasNext())
                 b.append('&');
         }
-        return b.toString();
+        checksum = checksumOf(b.toString());
+        b.append('|' + checksum + '}');
+        String fullmessage = "{" + b.toString();
+        return fullmessage;
     }
 }
