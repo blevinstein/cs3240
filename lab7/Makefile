@@ -1,6 +1,6 @@
 run: OnboardSystem.nxj
-	#nxjupload -r -b -d ${NXT} Controller.nxj
-	nxjupload -r -u Controller.nxj
+	#nxjupload -r -b -d ${NXT} $<
+	nxjupload -r -u $<
 
 %.class: %.java
 	nxjc $<
