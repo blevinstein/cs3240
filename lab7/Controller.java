@@ -44,6 +44,8 @@ public class Controller {
                	String command = message.pairs.get(0)[0];
                	String param = message.pairs.get(0)[1];
                	
+               	Message ack = new Message(message.getSeqNum());
+               	
             	if (command.equals("init")){
             		
             	}
@@ -57,7 +59,7 @@ public class Controller {
             	}
             	else if (command.equals("claw")){
             		float heading = Float.parseFloat(param);
-            		
+            		claw.rotate(heading);
             	}
             	else if (command.equals("stop")){
             		movement.setSpeed(0,0);
@@ -75,6 +77,9 @@ public class Controller {
             	else{
             		//not a valid command... 
             	}
+            	
+            	ack.pairs.add(new String[]{"done", null});
+            	comm.sendMessage(ack);
             			
             	
             	
