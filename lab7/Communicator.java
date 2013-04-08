@@ -46,7 +46,6 @@ public class Communicator implements Runnable {
         try{
             os.write(m.toString().getBytes());
             os.flush();
-            System.out.println("Sent: " + m.toString());
         } catch(IOException e) {
             System.out.println("Failed to send message!");
         }

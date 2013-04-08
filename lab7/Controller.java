@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
 
@@ -29,7 +30,7 @@ public class Controller {
             Message message;
             
             if (!comm.isConnected()) {
-            	//autopilot
+            	claw.rotate(100);
             }
             if (comm.hasMessage()) {
             	
@@ -52,8 +53,8 @@ public class Controller {
             		movement.setSpeed(move, move);
             	}
             	else if (command.equals("turn")){
-            		int degrees = Integer.parseInt(param);
-            		//somehow do something to turn the robot
+            		int rate = Integer.parseInt(param);
+                    movement.setSpeed(rate, -rate);
             	}
             	else if (command.equals("claw")){
                     int heading = Integer.parseInt(param);
@@ -64,7 +65,18 @@ public class Controller {
             	}
             	else if (command.equals("query")) {
             		// get telemetry data, construct message, comm.send() it
-            		
+            	    List<String> data =	telemetry.getTelemetryData();
+                    Message m = new Message(message.getSeqNum());
+                    m.pairs.add(new String[]{"data",null});
+                    m.pairs.add(new String[]{"distance","0"});
+                    m.pairs.add(new String[]{"light",data.get(0)});
+                    m.pairs.add(new String[]{"sound",data.get(1)});
+                    m.pairs.add(new String[]{"touch",data.get(2)});
+                    m.pairs.add(new String[]{"claw",claw.getAngle()+""});
+                    m.pairs.add(new String[]{"heading","0"});
+                    m.pairs.add(new String[]{"speed",(movement.getLeftSpeed() + movement.getRightSpeed())/2 + ""});
+                    m.pairs.add(new String[]{"ultrasonic",data.get(3)});
+                    comm.sendMessage(m);
             	}
             	else if (command.equals("quit")){
             		System.exit(-1);

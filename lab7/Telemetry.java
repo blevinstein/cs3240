@@ -40,7 +40,7 @@ public class Telemetry {
 		List<String> telemetry_data = new ArrayList<String>();
 		telemetry_data.add(Integer.toString(getLight()));
 		telemetry_data.add(Integer.toString(getSound()));
-		telemetry_data.add(Boolean.toString(getTouch()));
+        telemetry_data.add(getTouch() ? "1" : "0");
 		telemetry_data.add(Integer.toString(getUltrasonic()));
 		return telemetry_data;
 	}

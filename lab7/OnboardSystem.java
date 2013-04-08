@@ -27,7 +27,6 @@ public class OnboardSystem {
         } catch (Exception e) {
             System.out.println("Error!");
             e.printStackTrace(System.out);
-            while(true);
         }
 		
 	}
