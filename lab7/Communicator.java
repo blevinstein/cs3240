@@ -12,6 +12,10 @@ public class Communicator implements Runnable {
     private boolean terminateFlag;
     private boolean connected;
 
+    public Communicator() {
+        messageQueue = new Queue<Message>();
+    }
+
     // Return true if connected
     public boolean isConnected() {
         return connected;
@@ -29,7 +33,7 @@ public class Communicator implements Runnable {
 
     // Return true if there is a message in the queue
     public boolean hasMessage() {
-        return messageQueue.peek() != null;
+        return !messageQueue.empty();
     }
 
     // Retrieve oldest message in queue
@@ -41,8 +45,10 @@ public class Communicator implements Runnable {
     public void sendMessage(Message m) {
         try{
             os.write(m.toString().getBytes());
+            os.flush();
+            System.out.println("Sent: " + m.toString());
         } catch(IOException e) {
-            // TODO: not fail silently
+            System.out.println("Failed to send message!");
         }
     }
 
@@ -79,7 +85,7 @@ public class Communicator implements Runnable {
                         Message messageRead = new Message(stringBuffer.substring(startChar, endChar+1));
                         messageQueue.push(messageRead);
                         Message ack = new Message(messageRead.getSeqNum());
-                        ack.pairs.add(new String[]{"ack", messageRead.getMap().get(0)[0]});
+                        ack.pairs.add(new String[]{"ack", null});
                         sendMessage(ack);
                     }
 

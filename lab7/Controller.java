@@ -28,10 +28,6 @@ public class Controller {
         while (true) {
             Message message;
             
-            if (!comm.hasMessage() && comm.isConnected()) {
-            	//Thread.sleep(20);
-            	continue;
-            }
             if (!comm.isConnected()) {
             	//autopilot
             }
@@ -44,7 +40,9 @@ public class Controller {
                	String command = message.pairs.get(0)[0];
                	String param = message.pairs.get(0)[1];
                	
-               	Message ack = new Message(message.getSeqNum());
+                System.out.println(command);
+               	
+                Message ack = new Message(message.getSeqNum());
                	
             	if (command.equals("init")){
             		
@@ -58,7 +56,7 @@ public class Controller {
             		//somehow do something to turn the robot
             	}
             	else if (command.equals("claw")){
-            		float heading = Float.parseFloat(param);
+                    int heading = Integer.parseInt(param);
             		claw.rotate(heading);
             	}
             	else if (command.equals("stop")){
@@ -78,7 +76,7 @@ public class Controller {
             		//not a valid command... 
             	}
             	
-            	ack.pairs.add(new String[]{"done", null});
+            	ack.pairs.add(new String[]{"done", command});
             	comm.sendMessage(ack);
             			
             	

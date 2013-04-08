@@ -19,15 +19,16 @@ public class OnboardSystem {
 	
 	public static void main(String[] args){
 		
-		System.out.println("Welcome to the onboard system for group 13!");
-		System.out.println("Press any button to continue");
-		Button.waitForPress();
-	
-		System.out.println("Initializing..........");
 		controller = new Controller(MotorPort.A, MotorPort.B, MotorPort.C, SensorPort.S3, SensorPort.S1, SensorPort.S2, SensorPort.S4);
 		
 		//START EXECUTION OF ONBOARD SYSTEM
-		controller.mainLoop();
+        try {
+            controller.mainLoop();
+        } catch (Exception e) {
+            System.out.println("Error!");
+            e.printStackTrace(System.out);
+            while(true);
+        }
 		
 	}
 }

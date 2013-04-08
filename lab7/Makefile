@@ -6,7 +6,7 @@ run: OnboardSystem.nxj
 	nxjc $<
 
 %.nxj: %.class
-	nxjlink -o $@ $(patsubst %.class,%,$<)
+	nxjlink -o $@ -od $(patsubst %.class,%.nxd,$<) $(patsubst %.class,%,$<)
 
 clean:
 	rm -rf *.nxj *.class

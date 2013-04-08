@@ -65,7 +65,7 @@ public class Message {
 
     // serialize message for transmission
     public String toString() {
-        StringBuffer b = new StringBuffer("{");
+        StringBuffer b = new StringBuffer();
         Iterator<String[]> pairsIterator= pairs.iterator();
         while(pairsIterator.hasNext()) {
             String[] pair = pairsIterator.next();
@@ -81,8 +81,8 @@ public class Message {
             if(pairsIterator.hasNext())
                 b.append('&');
         }
-        int checksum = checksumOf(b.toString());
-        b.append('|' + checksum + '}');
+        int checksum = checksumOf(seqNum + b.toString());
+        b.append("|" + checksum + "}");
         String fullmessage = "{" + seqNum + b.toString();
         return fullmessage;
     }
