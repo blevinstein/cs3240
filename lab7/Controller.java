@@ -1,6 +1,6 @@
 import java.io.*;
-//import lejos.pc.*;
-import lejos.pc.comm.*;
+import lejos.nxt.*;
+import lejos.nxt.comm.*;
 
 public class Controller {
     Communicator comm;
@@ -9,8 +9,8 @@ public class Controller {
     Telemetry telemetry;
     
     public Controller(MotorPort clawPort,
-    				  MotorPort leftport,
-    				  MotorPort rightport,
+    				  MotorPort leftPort,
+    				  MotorPort rightPort,
     				  SensorPort light,
     				  SensorPort touch,
     				  SensorPort ultra,
@@ -20,9 +20,8 @@ public class Controller {
     	telemetry = new Telemetry(light, touch, ultra, sound);
     }
    
-    public static void mainLoop() {
+    public void mainLoop() {
         comm = new Communicator();
-        motionController = new MotionController();
        
         comm.start();
 
@@ -30,13 +29,13 @@ public class Controller {
             Message message;
             
             if (!comm.hasMessage() && comm.isConnected()) {
-            	Thread.sleep(20);
+            	//Thread.sleep(20);
             	continue;
             }
             if (!comm.isConnected()) {
             	//autopilot
             }
-            if (comm.hasMesssage()) {
+            if (comm.hasMessage()) {
             	
             	message = comm.getMessage();
             	
