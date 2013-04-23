@@ -10,6 +10,15 @@ import java.awt.event.AdjustmentListener;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
+ /**
+ * @author 
+ * Brian Levinstein(bpw7xx), 
+ * Yuchen Zou (yz2ak), 
+ * Neal Milstein (nrm2zf)
+ * Bryan Walsh (bpl4ab)
+ * Alex Weaver (baw4ux)
+ */
+
 /**
  * Class creates a GUI that is responsible for displaying the incoming messages from the robot.
  * The GUI constantly refreshes and listens for new messages and places them in the table when
