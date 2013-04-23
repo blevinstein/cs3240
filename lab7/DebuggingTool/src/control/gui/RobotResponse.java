@@ -10,11 +10,21 @@ import java.awt.event.AdjustmentListener;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
+/**
+ * Class creates a GUI that is responsible for displaying the incoming messages from the robot.
+ * The GUI constantly refreshes and listens for new messages and places them in the table when
+ * new messages are received.
+ */
 public class RobotResponse extends JPanel{
 	
+	/* 
+	 * GUI consists of a label and a table wrapped in JScrollPane for scrolling and 
+	 * DefaultCaret for refreshing.
+	 */
 	private JLabel responseLabel;
 	private JTextArea myResponses;
 	
+	//Setting up the RobotResponse GUI
 	public RobotResponse() {
 		
 		setLayout(new FlowLayout(FlowLayout.LEADING, 5, 3));
@@ -46,6 +56,9 @@ public class RobotResponse extends JPanel{
 		add(sp);
 	}
 	
+	/**
+	 * @return the 7x25 table containing the robot's responses
+	 */
 	public JTextArea getMyResponses() {
 		return myResponses;
 	}
