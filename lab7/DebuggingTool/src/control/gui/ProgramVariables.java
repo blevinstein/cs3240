@@ -18,13 +18,24 @@ import javax.swing.table.TableModel;
  *
  */
 
+/**
+ * Creates a GUI to displaying the following variables that govern the robot's movement 
+ * and telemetry data: gps coordinates, light intensity, sound intensity, touch sensitivity,
+ * ultrasonic detection, connection check, motor a/b/c speed
+ */
 public class ProgramVariables extends JPanel{
 	
+	//Set up GUI elements for ProgramVariables
 	private JLabel variableLabel;
 	private JTable myTable;
 	private Object[][] myVariables;
 	private JButton requestUpdate;
 	
+	/**
+	 * Method creates the ProgramVariables GUI. The Table object myTable is filled using a 2-D 
+	 * array myVarriables. It is then wrapped with JScrollPane to give it scrolling capabilities.
+	 * A JButton requestUpdate is implemented in the GUI to allow refreshing of updated program variables.
+	 */
 	public ProgramVariables() {
 		
 		setLayout(new FlowLayout(FlowLayout.LEADING, 8, 5));
@@ -70,22 +81,38 @@ public class ProgramVariables extends JPanel{
 		
 	}
 	
+	/**
+	 * @return the label of the GUI
+	 */
 	public JLabel getVariableLabel() {
 		return variableLabel;
 	}
 	
+	/**
+	 * @return the table GUI element
+	 */
 	public JTable getMyTable() {
 		return myTable;
 	}
-	
+
+	/**
+	 * @return the 2D array containing all the program variables and their values
+	 */
 	public Object[] getMyVariables() {
 		return myVariables;
 	}
 	
+	/**
+	 * @return the button GUI element
+	 */
 	public JButton getRequestUpdate() {
 		return requestUpdate;
 	}
 
+	/**
+	 * Updates the values in myVariables and refreshes the JTable object.
+	 * @param an array that contains updated robot variable values.
+	 */
 	public void update(ArrayList<Object> splits) {
 		for(int x = 0; x < myVariables.length; x++) {
 			//model.setValueAt(splits.get(x), x, 1);
