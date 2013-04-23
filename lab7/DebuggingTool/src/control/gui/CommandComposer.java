@@ -13,36 +13,81 @@ import javax.swing.*;
 //import control.communication.CommandMessage;
 
 /**
+ * User interface class (JPanel) for the composition and issuing of possible commands. Allows
+ * for the execution of the following commands:
+ * <ul>
+ * <li> INIT: Ensure that a BlueTooth connection exists
+ * <li> MOVE: Set both left and right motor speed (value for both speeds to be specified by JSpinner)
+ * <li> TURN: Rotate the robot (number of degrees specified by JSpinner)
+ * <li> CLAW: Set value of claw motor (value to be specified by JSpinner)
+ * <li> STOP: Stop robot movement
+ * <li> QUERY: Request a response of all telemetry/motor data
+ * <li> QUIT: Close the connection between the robot and base station
+ * <li> ACKNOWLEDGE: Send acknowledgment message
+ * </ul>
+ * <p>
  * TODO: 
- * change parameter spinner based on command selected
- * 
+ * Generalize JSpinner, {@link CommandComposer#myDegrees}, so that it may be used to set
+ * parameters for all applicable commands, not just TURN (ie. MOVE, etc...)
  * @author Steph
- *
  */
 
 public class CommandComposer extends JPanel{
 	
+	/**
+	 * Title label, to read "Command Composer"
+	 */
 	private JLabel composerLabel;
+	
+	/**
+	 * JComboBox object responsible for displaying and selecting commands:
+	 * INIT, MOVE, TURN, CLAW, STOP, QUERY, QUIT, and ACKNOWLEDGE
+	 */
 	private JComboBox commandList;
+	
+	/**
+	 * JSpinner object responsible for displaying and controlling degree value
+	 * for TURN commands
+	 */
 	private JSpinner myDegrees;
 	//private JCheckBox myTimestamp;
+	
+	/**
+	 * JButton object responsible for issuing commands
+	 */
 	private JButton sendCommand;
 	
+	/**
+	 * Default Constructor for CommandComposer
+	 * <p>
+	 * Generates the user interface for selecting commands and their parameters, as well as issuing said commands. 
+	 * When the command selected by {@link CommandComposer#commandList} is changed, 
+	 * the JSpinner will update to allow for the selection of parameters for the newly-selected command.
+	 * Finally, when {@link CommandComposer#sendCommand} is pressed, it will issue the command with the
+	 * specified parameters.
+	 */
 	public CommandComposer() {
 
+		// Set size and layout of panel
 		setPreferredSize(new Dimension(250, 170));
 		setLayout(new FlowLayout(FlowLayout.LEADING, 8, 3));
 		
+		// Set title label message and style
 		composerLabel = new JLabel("Command Composer");
 		composerLabel.setFont(new Font("Arial", Font.BOLD, 15));
 		
+		// Populate commandList with commands and set style
 		String[] commands = {"Init", "Move", "Turn", "Claw", "Stop", "Query", "Quit", "Acknowledge"};
 		commandList = new JComboBox(commands);
 		commandList.setFont(new Font("Arial", Font.PLAIN, 13));
 		commandList.setPreferredSize(new Dimension(235, 40));
 		commandList.setEditable(false);
+		
+		// Action listener for the change in JComboBox selection for commandList
 		commandList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				// Get selected action and set JSpinner accordingly
 				JComboBox cb = (JComboBox) e.getSource();
 				String command = (String) cb.getSelectedItem();
 				if(command.equals("Init")) {
@@ -77,6 +122,7 @@ public class CommandComposer extends JPanel{
 			}
 		});
 		
+		// Parameter JLabel
 		JLabel params = new JLabel("  Parameter");
 		params.setFont(new Font("Arial", Font.PLAIN, 13));
 		
@@ -90,6 +136,8 @@ public class CommandComposer extends JPanel{
 		//myTimestamp = new JCheckBox("Include Timestamp");
 		//myTimestamp.setFont(new Font("Arial", Font.PLAIN, 13));	
 		
+		
+		// Issue selected command with specified parameters
 		sendCommand = new JButton("Send Command");
 		sendCommand.setFont(new Font("Arial", Font.PLAIN, 14));
 		sendCommand.setPreferredSize(new Dimension(235, 35));
@@ -103,10 +151,20 @@ public class CommandComposer extends JPanel{
 		
 	}
 	
+	/**
+	 * Simple Getter for {@link CommandComposer#commandList} (JComboBox 
+	 * object responsible for displaying and selecting commands)
+	 * @return {@link CommandComposer#commandList}
+	 */
 	public JComboBox getCommands() {
 		return commandList;
 	}
 	
+	/**
+	 * Simple Getter for {@link CommandComposer#myDegrees} (JSpinner object 
+	 * responsible for displaying and controlling degree value for TURN commands)
+	 * @return {@link CommandComposer#myDegrees}
+	 */
 	public JSpinner getDegrees() {
 		return myDegrees;
 	}
@@ -115,6 +173,11 @@ public class CommandComposer extends JPanel{
 		return myTimestamp.isSelected();
 	}*/
 	
+	/**
+	 * Simple Getter for {@link CommandComposer#sendCommand} (JButton object
+	 * responsible for issuing commands)
+	 * @return {@link CommandComposer#sendCommand}
+	 */
 	public JButton getSendButton() {
 		return sendCommand;
 	}
