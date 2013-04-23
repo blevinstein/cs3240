@@ -3,45 +3,65 @@ import java.io.*;
 
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
-
+/**
+ * Class which provides for communication with the base station.
+ * Each instance of a Communicator can start a separate thread for the purpose
+ * of receiving and buffering incoming messages.
+ */
 public class Communicator implements Runnable {
-    private Queue<Message> messageQueue;
-    private NXTConnection connection;
-    private InputStream is;
-    private OutputStream os;
-    private boolean terminateFlag;
-    private boolean connected;
+    private Queue<Message> messageQueue;    // queue of messages received from the base station
+    private NXTConnection connection;       // connection to the base station
+    private InputStream is;                 // input stream from the base station
+    private OutputStream os;                // output stream to the base station
+    private boolean terminateFlag;          // this flag is used internally to signal that the receiving thread should terminate
+    private boolean connected;              // this flag indicates whether there is an active connection to the base station
 
+    /**
+     * Constructs a standard Communicator object for communicating with the base station.
+     */
     public Communicator() {
         messageQueue = new Queue<Message>();
     }
 
-    // Return true if connected
+    /**
+     * @return true iff there is an active connection to the base station.
+     */
     public boolean isConnected() {
         return connected;
     }
 
-    // Start listening for messages
+    /**
+     * Starts a separate thread to receive and buffer input from the base station.
+     */
     public void start() {
         (new Thread(this)).start();
     }
 
-    // Stop listening for messages
+    /**
+     * If connected to the base station, this will terminate the connection and stop the receiving thread.
+     */
     public void stop() {
         terminateFlag = true;
     }
 
-    // Return true if there is a message in the queue
+    /**
+     * @return true iff there is a message in the queue
+     */
     public boolean hasMessage() {
         return !messageQueue.empty();
     }
 
-    // Retrieve oldest message in queue
+    /**
+     * @return The oldest message in the message queue.
+     */
     public Message getMessage() {
         return (Message)messageQueue.pop();
     }
 
-    // Send message to base station
+    /**
+     * Sends a message to the base station.
+     * @param m The message to be sent.
+     */
     public void sendMessage(Message m) {
         try{
             os.write(m.toString().getBytes());
@@ -51,7 +71,10 @@ public class Communicator implements Runnable {
         }
     }
 
-    // Main thread
+    /**
+     * This is the main method of the separate thread which buffers input.
+     * In general, this method should not be called from methods outside Communicator.
+     */
     public void run() {
         String stringBuffer = "";
         byte[] byteBuffer = new byte[1024];

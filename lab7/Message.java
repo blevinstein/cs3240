@@ -1,24 +1,32 @@
 import java.util.*;
 
-/*
- * Message format:
- * {0x:y&y:z|asdf1234}
+/**
+ * Class for representing a message, which can be sent to or received from the base station.
+ * 
+ * Serialized Message format:
+ * {0x:y&y:z|1234}
  * 0 is the sequence number (valid values: 0 and 1)
- * then there is a list of key-value pairs (or just tokens, which are treated as keys corresponding to empty values)
- * then a checksum
+ * followed by a series of key:value pairs separated by ampersands (&)
+ * followed by a bar (|) and a checksum
  */
-
 public class Message {
-    private int seqNum;
-    public ArrayList<String[]> pairs;
+    private int seqNum;                 // the sequence number of the message
+    public ArrayList<String[]> pairs;   // the key-value pairs contained in the message
     
 
-    // construct empty message
+    /**
+     * Constructs an empty message with the given sequence number.
+     * @param seqNum The sequence number of the message.
+     */
     public Message(int seqNum) {
         pairs = new ArrayList<String[]>();
         this.seqNum = seqNum;
     }
 
+    /**
+     * Internal method for calculating the "checksum" of a string.
+     * @param s The string to calculate a checksum for.
+     */
     private int checksumOf(String s) {
         int cs = 0;
         for(int i=0; i<s.length(); i++)
@@ -26,7 +34,10 @@ public class Message {
         return ~cs;
     }
 
-    // construct the original message from a string
+    /**
+     * Constructs a message from a serialized representation received from the base station.
+     * @param s The serialized representation of the message.
+     */
     public Message(String s) {
         // check for correct delimiters
         assert(s.charAt(0) == '{' && s.charAt(s.length()-1) == '}');
@@ -53,17 +64,24 @@ public class Message {
         }
     }
 
-    // return the underlying HashMap
+    /**
+     * @return The underlying ArrayList of key-value pairs which constitute the body of the message.
+     */
     public ArrayList<String[]> getMap() {
         return pairs;
     }
 
-    // return the sequence number
+    /**
+     * @return The sequence number of the message.
+     */
     public int getSeqNum() {
         return seqNum;
     }
 
-    // serialize message for transmission
+    /**
+     * Serializes the message into a format which can be sent to the base station.
+     * @return A String containing the serialized representation of the message.
+     */
     public String toString() {
         StringBuffer b = new StringBuffer();
         Iterator<String[]> pairsIterator= pairs.iterator();

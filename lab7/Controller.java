@@ -3,12 +3,26 @@ import java.util.*;
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
 
+
+/**
+ * Provides the main loop for the NXT brick, once it has been initialized with a specific port configuration.
+ */
 public class Controller {
     Communicator comm;
     Claw claw;
     Movement movement;
     Telemetry telemetry;
-    
+  
+    /**
+     * Constructs a Controller instance with the given port configuration.
+     * @param clawPort The motor which is connected to the claw.
+     * @param leftPort The motor which is connected to the left wheel.
+     * @param rightPort The motor which is connected to the right wheel.
+     * @param light The port which is connected to the light sensor.
+     * @param touch The port which is connected to the touch sensor.
+     * @param ultra The port which is connected to the ultrasonic sensor.
+     * @param sound The port which is connected to the sound sensor.
+     */
     public Controller(MotorPort clawPort,
     				  MotorPort leftPort,
     				  MotorPort rightPort,
@@ -20,7 +34,11 @@ public class Controller {
     	movement = new Movement(leftPort, rightPort);
     	telemetry = new Telemetry(light, touch, ultra, sound);
     }
-   
+
+    /**
+     * The main control loop for the program.
+     * Interprets incoming messages from the Communicator and performs the appropriate action.
+     */
     public void mainLoop() {
         comm = new Communicator();
        
@@ -91,10 +109,6 @@ public class Controller {
             	ack.pairs.add(new String[]{"done", command});
             	comm.sendMessage(ack);
             			
-            	
-            	
-            
-            
             }
         }
     }
