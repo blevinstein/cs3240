@@ -23,6 +23,10 @@ import javax.swing.JPanel;
 //import control.communication.ResponseMessage;
 //import control.main.Controller;
 
+/** 
+ * This class  unifies all the GUI elements: CommandQueue, CommandComposer, OtherCommands, 
+ * ProgramVariables, and RobotResponse.
+ */
 public class DebugInterface {
 	
 	private static CommandQueue myQueue;
@@ -47,6 +51,7 @@ public class DebugInterface {
 	 *		command queue list should be a JLIST not a text area
 	 * */
 	
+	//Creates the DebugInterface and displays it
 	public static void main(String[] args) {
 		
 		DebugInterface myDebug = new DebugInterface();
@@ -55,42 +60,72 @@ public class DebugInterface {
 		
 	}
 	
+	/** 
+	 * @return the GUI element CommandQueue
+	 */
 	public static CommandQueue getMyQueue() {
 		return myQueue;
 	}
 
+	/** 
+	 * @param Takes a CommandQueue and set the DebugInterface's CommandQueue to it
+	 */
 	public static void setMyQueue(CommandQueue myQueue) {
 		DebugInterface.myQueue = myQueue;
 	}
 
+	/** 
+	 * @return the GUI element CommandComposer
+	 */
 	public static CommandComposer getMyComposer() {
 		return myComposer;
 	}
 
+	/** 
+	 * @param Takes a CommandComposer and set the DebugInterface's CommandComposer to it
+	 */
 	public static void setMyComposer(CommandComposer myComposer) {
 		DebugInterface.myComposer = myComposer;
 	}
 
+	/** 
+	 * @return the GUI elmement OtherCommands
+	 */
 	public static OtherCommands getMyOther() {
 		return myOther;
 	}
 
+	/** 
+	 * @param Takes a OtherCommands and set the DebugInterface's OtherCommands to it
+	 */
 	public static void setMyOther(OtherCommands myOther) {
 		DebugInterface.myOther = myOther;
 	}
 
+	/** 
+	 * @return the GUI element ProgramVariables
+	 */
 	public static ProgramVariables getMyVariables() {
 		return myVariables;
 	}
 
+	/** 
+	 * @param Takes a ProgramVariables and set the DebugInterface's ProgramVariables to it
+	 */
 	public static void setMyVariables(ProgramVariables myVariables) {
 		DebugInterface.myVariables = myVariables;
 	}
 
+	/** 
+	 * @return the GUI element RobotResponse
+	 */
 	public static RobotResponse getMyResponse() {
 		return myResponse;
 	}
 
+	/** 
+	 * @param Takes a RobotResponse and set the DebugInterface's RobotResponse to it
+	 */
 	public static void setMyResponse(RobotResponse myResponse) {
 		DebugInterface.myResponse = myResponse;
 	}
@@ -103,14 +138,24 @@ public class DebugInterface {
 	//	this.myController = myController;
 	//}
 
+	/** 
+	 * @return the JFrame object of the DebugingTool
+	 */
 	public JFrame getMyFrame() {
 		return myFrame;
 	}
 
+	/** 
+	 * @param Takes a JFrame and set the DebugInterface's JFrame to it
+	 */
 	public void setMyFrame(JFrame myFrame) {
 		this.myFrame = myFrame;
 	}
 
+	/** 
+	 * Constructor for the DebugInterface. This is where the main GUI is set up 
+	 * and all sub-GUIs belonging to it are created and linked to the DebugInterface
+	 */
 	public DebugInterface(/*Controller contr*/) {
 		myFrame = new JFrame("ROBOT DEBUGGER");
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -220,6 +265,7 @@ public class DebugInterface {
 		//frame.setVisible(true);
 	}
 	
+	//Unhides DebugInterface GUI
 	public void display() {
 		myFrame.setVisible(true);
 	}
@@ -249,6 +295,9 @@ public class DebugInterface {
 		myVariables.update(splits);
 	}*/
 	
+	/** 
+	 * @return the GUI element CommandQueue
+	 */
 	public CommandQueue getQueue() {
 		return myQueue;
 	}
