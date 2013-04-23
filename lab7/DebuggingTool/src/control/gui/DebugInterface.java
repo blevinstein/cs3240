@@ -16,6 +16,15 @@ import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+ /**
+ * @author 
+ * Brian Levinstein(bpw7xx), 
+ * Yuchen Zou (yz2ak), 
+ * Neal Milstein (nrm2zf)
+ * Bryan Walsh (bpl4ab)
+ * Alex Weaver (baw4ux)
+ */
+
 //import lejos.pc.comm;
 
 //import control.communication.CommandMessage;
