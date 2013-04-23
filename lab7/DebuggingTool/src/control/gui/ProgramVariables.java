@@ -13,9 +13,16 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 /**
- * 
  * @author slc4ga
- *
+ */
+ 
+ /**
+ * @author 
+ * Brian Levinstein(bpw7xx), 
+ * Yuchen Zou (yz2ak), 
+ * Neal Milstein (nrm2zf)
+ * Bryan Walsh (bpl4ab)
+ * Alex Weaver (baw4ux)
  */
 
 /**
