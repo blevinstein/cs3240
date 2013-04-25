@@ -87,6 +87,13 @@ public class Movement {
 		}
 	}
 
+    public void setMaxSpeed(){
+    
+    	left_motor.setSpeed(MAX_SPEED);
+    	right_motor.setSpeed(MAX_SPEED);
+    
+    }	
+	
     /**
      * @return The approximate distance traveled.
      */
