@@ -10,6 +10,7 @@ public class Claw {
 	private MotorPort motorPort; // the port for the NXT motor
 	
 	private static final int GEAR_RATIO = 3;
+	private static final int MAX_ROTATION_ANGLE = 360;
 	
 	/**
 	 * Creates a Claw object to interface with the claw
@@ -50,7 +51,7 @@ public class Claw {
 	 * @param degrees the given number of degrees to rotate by
 	 */
 	public void rotate(int degrees){
-		degrees %= 360; //anything over 360 is redundant
+		degrees %= MAX_ROTATION_ANGLE; //anything over 360 is redundant
 		motor.rotate(degrees / GEAR_RATIO);
 		angle = motor.getTachoCount();
 	}
