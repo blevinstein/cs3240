@@ -36,6 +36,12 @@ public class Movement {
 	// max motor speed
 	private static final int MAX_SPEED = 128;
 	
+	// forward rotation
+	private static final int POSITIVE_ROTATION = 1;
+	
+	// backward rotation
+	private static final int NEGATIVE_ROTATION = -1;
+	
 	/**
 	 * Creates a new Movement class with the given left and right ports.
 	 * @param leftport the port to use for the left motor
@@ -70,19 +76,19 @@ public class Movement {
 		left_motor.setSpeed(left_speed);
 		right_motor.setSpeed(right_speed);
 		
-		if (left_speed >= 0) {
-			LEFT_ROTATION = 1;
+		if (left_speed >= START_SPEED) {
+			LEFT_ROTATION = POSITIVE_ROTATION;
 			left_motor.forward();
 		} else {
-			LEFT_ROTATION = -1;
+			LEFT_ROTATION = NEGATIVE_ROTATION;
 			left_motor.backward();
 		}
 		
-		if (right_speed >= 0) {
-			RIGHT_ROTATION = 1;
+		if (right_speed >= START_SPEED) {
+			RIGHT_ROTATION = POSITIVE_ROTATION;
 			right_motor.forward();
 		} else {
-			RIGHT_ROTATION = -1;
+			RIGHT_ROTATION = NEGATIVE_ROTATION;
 			right_motor.backward();
 		}
 	}
