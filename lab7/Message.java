@@ -27,7 +27,7 @@ public class Message {
      * Internal method for calculating the "checksum" of a string.
      * @param s The string to calculate a checksum for.
      */
-    private int checksumOf(String s) {
+    private static int checksumOf(String s) {
         int cs = 0;
         for(int i=0; i<s.length(); i++)
             cs += s.charAt(i);
