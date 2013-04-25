@@ -92,6 +92,12 @@ public class Movement {
     	right_motor.setSpeed(MAX_SPEED);
     }	
 	
+    public void halt(){
+    	left_motor.setSpeed(START_SPEED);
+    	right_motor.setSpeed(START_SPEED);
+    }	
+	
+	
     /**
      * @return The approximate distance traveled.
      */
