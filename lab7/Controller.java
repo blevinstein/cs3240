@@ -12,6 +12,8 @@ public class Controller {
     Claw claw;
     Movement movement;
     Telemetry telemetry;
+    
+    private static final int AUTOPILOT_ROTATION_SPEED = 100;
   
     /**
      * Constructs a Controller instance with the given port configuration.
@@ -48,7 +50,7 @@ public class Controller {
             Message message;
             
             if (!comm.isConnected()) {
-            	claw.rotate(100);
+            	claw.rotate(AUTOPILOT_ROTATION_SPEED);
             }
             if (comm.hasMessage()) {
             	
@@ -79,7 +81,7 @@ public class Controller {
             		claw.rotate(heading);
             	}
             	else if (command.equals("stop")){
-            		movement.setSpeed(0,0);
+            		movement.halt();
             	}
             	else if (command.equals("query")) {
             		// get telemetry data, construct message, comm.send() it
