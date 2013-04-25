@@ -19,6 +19,16 @@ public class Movement {
 	// The status of the left and right motors. Forward = 1, backward = -1
 	private int LEFT_ROTATION = 1;
 	private int RIGHT_ROTATION = 1;
+
+    // Constants to allow for calibration of distance and heading calculations.
+    private double DIST_MULTIPLIER = 1;
+    private double HEADING_MULTIPLIER = 1;
+    // The distance traveled and current heading
+    private double dist_traveled = 0;
+    private double heading = 0;
+
+    // Last time setSpeed was called
+    private long lastSetSpeed = 0;
 	
 	// starting motor speed
 	private static final int START_SPEED = 0;
@@ -36,6 +46,7 @@ public class Movement {
 		right_motor = new NXTRegulatedMotor(rightport);
 		
 		setSpeed(START_SPEED, START_SPEED);
+        lastSetSpeed = System.currentTimeMillis();
 		
 		setLeftMotorPort(leftport);
 		setRightMotorPort(rightport);
@@ -47,6 +58,14 @@ public class Movement {
 	 * @param right_speed speed of the right motor
 	 */
 	public void setSpeed(int left_speed, int right_speed){
+
+        // Update approximate distance travelled and heading, based on previous motor speeds.
+        long currentSetSpeed = System.currentTimeMillis();
+        long elapsed = currentSetSpeed - lastSetSpeed;
+        int lastLeftSpeed = left_motor.getSpeed() * LEFT_ROTATION;
+        int lastRightSpeed = right_motor.getSpeed() * RIGHT_ROTATION;
+        dist_traveled += (lastLeftSpeed + lastRightSpeed) * elapsed / 2;
+        heading += (lastLeftSpeed - lastRightSpeed) * elapsed / 2;
 		
 		left_motor.setSpeed(left_speed);
 		right_motor.setSpeed(right_speed);
@@ -67,6 +86,20 @@ public class Movement {
 			right_motor.backward();
 		}
 	}
+
+    /**
+     * @return The approximate distance traveled.
+     */
+    public double getDistTraveled() {
+        return dist_traveled;
+    }
+
+    /**
+     * @return The approximate heading relative to initial heading.
+     */
+    public double getHeading() {
+        return heading;
+    }
 	
 	/**
 	 * 
