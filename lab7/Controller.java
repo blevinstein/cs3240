@@ -12,8 +12,10 @@ public class Controller {
     Claw claw;
     Movement movement;
     Telemetry telemetry;
+  
     
-    private static final int AUTOPILOT_ROTATION_SPEED = 100;
+    private static final int AUTONOMOUS_SPEED = 180;
+    private static final int AUTONOMOUS_CLAW_SPEED = 120;
   
     /**
      * Constructs a Controller instance with the given port configuration.
@@ -36,6 +38,11 @@ public class Controller {
     	movement = new Movement(leftPort, rightPort);
     	telemetry = new Telemetry(light, touch, ultra, sound);
     }
+    
+    public void autonomousMode(){
+    	movement.setSpeed(AUTONOMOUS_SPEED, -AUTONOMOUS_SPEED);
+    	claw.rotate(AUTONOMOUS_CLAW_SPEED);
+    }
 
     /**
      * The main control loop for the program.
@@ -50,12 +57,10 @@ public class Controller {
             Message message;
             
             if (!comm.isConnected()) {
-            	claw.rotate(AUTOPILOT_ROTATION_SPEED);
-            } else {
-                // not connected, check for messages
-            }
+            	autonomousMode();
+            } 
             
-            if (comm.hasMessage()) {
+            else if (comm.hasMessage()) {
             	
             	message = comm.getMessage();
             	
@@ -69,7 +74,8 @@ public class Controller {
                 Message ack = new Message(message.getSeqNum());
                	
             	if (command.equals("init")){
-            		
+            		System.out.println("Robot is successfully initialized. Proceed to" +
+            				" send commands.")
             	}
             	else if (command.equals("move")){
             		int move = Integer.parseInt(param);
@@ -91,12 +97,12 @@ public class Controller {
             	    List<String> data =	telemetry.getTelemetryData();
                     Message m = new Message(message.getSeqNum());
                     m.pairs.add(new String[]{"data",null});
-                    m.pairs.add(new String[]{"distance","0"});
+                    m.pairs.add(new String[]{"distance", Double.toString(movement.getDistTraveled())});
                     m.pairs.add(new String[]{"light",data.get(0)});
                     m.pairs.add(new String[]{"sound",data.get(1)});
                     m.pairs.add(new String[]{"touch",data.get(2)});
                     m.pairs.add(new String[]{"claw",claw.getAngle()+""});
-                    m.pairs.add(new String[]{"heading","0"});
+                    m.pairs.add(new String[]{"heading", Double.toString(movement.getHeading())});
                     m.pairs.add(new String[]{"speed",(movement.getLeftSpeed() + movement.getRightSpeed())/2 + ""});
                     m.pairs.add(new String[]{"ultrasonic",data.get(3)});
                     comm.sendMessage(m);
@@ -115,6 +121,7 @@ public class Controller {
             	comm.sendMessage(ack);
             			
             } else {
+            	System.out.println("Command queue empty. Awaiting additional commands.");
                 // queue is empty, do nothing
             }
         }
