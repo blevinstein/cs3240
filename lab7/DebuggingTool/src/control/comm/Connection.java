@@ -9,7 +9,6 @@ import java.util.*;
  */
 public class Connection {
   private NXTComm comm; // the private NXTComm object used for communication
-  
   private int seqNum = 0;
 
   /**

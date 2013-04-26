@@ -13,7 +13,10 @@ import java.util.*;
 public class Message {
     private int seqNum;                 // the sequence number of the message
     public ArrayList<String[]> pairs;   // the key-value pairs contained in the message
-    
+
+    public Message() {
+        pairs = new ArrayList<String[]>();
+    }
 
     /**
      * Constructs an empty message with the given sequence number.
