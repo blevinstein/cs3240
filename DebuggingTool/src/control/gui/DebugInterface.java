@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -64,7 +65,6 @@ public class DebugInterface {
 	
 	//Creates the DebugInterface and displays it
 	public static void main(String[] args) {
-		
 		DebugInterface myDebug = new DebugInterface();
 		myDebug.display();
 		
@@ -168,6 +168,9 @@ public class DebugInterface {
 	 * and all sub-GUIs belonging to it are created and linked to the DebugInterface
 	 */
 	public DebugInterface(/*Controller contr*/) {
+		conn = new Connection(this);
+		conn.connect();
+		
 		myFrame = new JFrame("ROBOT DEBUGGER");
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		myFrame.setSize(500, 600);
@@ -193,63 +196,64 @@ public class DebugInterface {
 				System.out.println(selected);
 				
 				Message msg = new Message();
-//				String val = myComposer.getDegrees().getValue();
+				String val = myComposer.getDegrees().getValue().toString();
 				if(selected.equals("Init")) {
 					msg.put("init", null);
-//					myController.addMessage(new CommandMessage(CommandType.INIT));
 				} else if(selected.equals("Query")) {
-					msg.put("query", null);
-//					myController.addMessage(new CommandMessage(CommandType.QUERY));					
+					msg.put("query", null);					
 				} else if(selected.equals("Quit")) {
-					msg.put("quit", null);
-//					myController.addMessage(new CommandMessage(CommandType.QUIT));					
+					msg.put("quit", null);					
 				} else if(selected.equals("Move")) {
-					msg.put("move", null);
-//					myController.addMessage(new CommandMessage(CommandType.MOVE, myComposer.getDegrees().getValue()));
+					msg.put("move", val);
 				} else if(selected.equals("Turn")) {
-					msg.put("turn", null);
-//					myController.addMessage(new CommandMessage(CommandType.TURN, myComposer.getDegrees().getValue()));
+					msg.put("turn", val);
 				} else if(selected.equals("Claw")) {
-					msg.put("claw");
-//					myController.addMessage(new CommandMessage(CommandType.CLAW, ((Integer)myComposer.getDegrees().getValue())/100.0));
+					msg.put("claw", val);
 				} else {
-//					myController.addMessage(new CommandMessage((CommandType.ACK)));
+					msg.put("ack", null);
 				}
 				myQueue.addMessage(msg);
+				myQueue.updateMessages(conn.getSeqNum());
 			}
 		});
 		
 		myOther.getAutonomous().addItemListener( new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(myOther.getAutonomous().isSelected()) {
-					System.out.println("Autonomouse selected");
-//					myController.addMessage(new CommandMessage(CommandType.AUTO));
+					Message msg = new Message();
+					msg.getMap().add(new String[] {"auto", null});
+					conn.sendMessage(msg);
 				}
 			}
 		});
 		
 		myOther.getHalt().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//
-//				myController.addMessage(new CommandMessage(CommandType.HALT));
+				Message msg = new Message();
+				msg.getMap().add(new String[] {"halt", null});
+				conn.sendMessage(msg);
 			}
 		});
 		
 		myOther.getPower().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				myController.addMessage(new CommandMessage(CommandType.POWD));
+				Message msg = new Message();
+				msg.getMap().add(new String[] {"powd", null});
+				conn.sendMessage(msg);
 			}
 		});
 		
 		myOther.getReset().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				myController.addMessage(new CommandMessage(CommandType.RSET));
+				Message msg = new Message();
+				msg.getMap().add(new String[] {"rset", null});
+				conn.sendMessage(msg);
 			}
 		});
 		
 		myVariables.getRequestUpdate().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				myController.addMessage(new CommandMessage(CommandType.UPDT));
+				//
 			}
 		});
 		

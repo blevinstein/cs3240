@@ -36,7 +36,7 @@ public class CommandQueue extends JPanel{
 	/**
 	 * JList object containing names of commands to be executed
 	 */
-	private JList<Message> myQueue;
+	private JList myQueue;
 	
 	/**
 	 * JButton object responsible for stepping through commands in queue
@@ -56,7 +56,7 @@ public class CommandQueue extends JPanel{
 	/**
 	 * List model for {@link CommandQueue#myQueue}
 	 */
-	private DefaultListModel<Message> myList;
+	private DefaultListModel myList;
 	
 	/**
 	 * Default constructor for CommandQueue.
@@ -75,7 +75,7 @@ public class CommandQueue extends JPanel{
 		commandLabel.setFont(new Font("Arial", Font.BOLD, 15));
 		
 		// Instantiate myList
-		myList = new DefaultListModel<Message>();
+		myList = new DefaultListModel();
 		
 		// Instantiate and set style for myQueue
 		myQueue = new JList(myList);
@@ -134,7 +134,7 @@ public class CommandQueue extends JPanel{
 	 * Simple Getter
 	 * @return {@link CommandQueue#myList} (List model for {@link CommandQueue#myQueue})
 	 */
-	public DefaultListModel<Message> getMyList() {
+	public DefaultListModel getMyList() {
 		return myList;
 	}
 	
@@ -142,7 +142,7 @@ public class CommandQueue extends JPanel{
 	 * Simple Getter
 	 * @return {@link CommandQueue#myQueue} (JList object containing names of commands to be executed)
 	 */
-	public JList<Message> getQueue() {
+	public JList getQueue() {
 		return myQueue;
 	}
 	
@@ -172,7 +172,7 @@ public class CommandQueue extends JPanel{
 	
 	public void updateMessages(int seqNum) {
 		for (int i=0; i<myList.size(); i++) {
-			myList.get(i).setSeqNum(seqNum);
+			((Message)myList.get(i)).setSeqNum(seqNum);
 			seqNum = seqNum == 0 ? 1 : 0;
 		}
 	}
