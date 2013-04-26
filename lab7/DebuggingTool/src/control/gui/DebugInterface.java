@@ -64,9 +64,9 @@ public class DebugInterface {
 	public static void main(String[] args) {
 		
 		DebugInterface myDebug = new DebugInterface();
-    myDebug.display();
-    while (true);
+		myDebug.display();
 		
+		while (true);	
 	}
 	
 	/** 
@@ -182,59 +182,64 @@ public class DebugInterface {
 		myVariables = new ProgramVariables();
 		myResponse = new RobotResponse();
 		
-    /*
+    
 		myComposer.getSendButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// make command message and add to controller queue
 				// for original programming purposes, print string
 				String selected = (String)myComposer.getCommands().getSelectedItem();
-				if(selected.equals("Init")) {
-					myController.addMessage(new CommandMessage(CommandType.INIT));
-				} else if(selected.equals("Query")) {
-					myController.addMessage(new CommandMessage(CommandType.QUERY));					
-				} else if(selected.equals("Quit")) {
-					myController.addMessage(new CommandMessage(CommandType.QUIT));					
-				} else if(selected.equals("Move")) {
-					myController.addMessage(new CommandMessage(CommandType.MOVE, myComposer.getDegrees().getValue()));
-				} else if(selected.equals("Turn")) {
-					myController.addMessage(new CommandMessage(CommandType.TURN, myComposer.getDegrees().getValue()));
-				} else if(selected.equals("Claw")) {
-					myController.addMessage(new CommandMessage(CommandType.CLAW, ((Integer)myComposer.getDegrees().getValue())/100.0));
-				} else {
-					myController.addMessage(new CommandMessage((CommandType.ACK)));
-				}
+				
+				System.out.println(selected);
+				
+//				if(selected.equals("Init")) {
+//					myController.addMessage(new CommandMessage(CommandType.INIT));
+//				} else if(selected.equals("Query")) {
+//					myController.addMessage(new CommandMessage(CommandType.QUERY));					
+//				} else if(selected.equals("Quit")) {
+//					myController.addMessage(new CommandMessage(CommandType.QUIT));					
+//				} else if(selected.equals("Move")) {
+//					myController.addMessage(new CommandMessage(CommandType.MOVE, myComposer.getDegrees().getValue()));
+//				} else if(selected.equals("Turn")) {
+//					myController.addMessage(new CommandMessage(CommandType.TURN, myComposer.getDegrees().getValue()));
+//				} else if(selected.equals("Claw")) {
+//					myController.addMessage(new CommandMessage(CommandType.CLAW, ((Integer)myComposer.getDegrees().getValue())/100.0));
+//				} else {
+//					myController.addMessage(new CommandMessage((CommandType.ACK)));
+//				}
 			}
 		});
 		
 		myOther.getAutonomous().addItemListener( new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(myOther.getAutonomous().isSelected()) {
-					myController.addMessage(new CommandMessage(CommandType.AUTO));
+					System.out.println("Autonomouse selected");
+//					myController.addMessage(new CommandMessage(CommandType.AUTO));
 				}
 			}
 		});
 		
 		myOther.getHalt().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				myController.addMessage(new CommandMessage(CommandType.HALT));
+				//
+//				myController.addMessage(new CommandMessage(CommandType.HALT));
 			}
 		});
 		
 		myOther.getPower().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				myController.addMessage(new CommandMessage(CommandType.POWD));
+//				myController.addMessage(new CommandMessage(CommandType.POWD));
 			}
 		});
 		
 		myOther.getReset().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				myController.addMessage(new CommandMessage(CommandType.RSET));
+//				myController.addMessage(new CommandMessage(CommandType.RSET));
 			}
 		});
 		
 		myVariables.getRequestUpdate().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				myController.addMessage(new CommandMessage(CommandType.UPDT));
+//				myController.addMessage(new CommandMessage(CommandType.UPDT));
 			}
 		});
 		
@@ -248,7 +253,7 @@ public class DebugInterface {
 			public void actionPerformed(ActionEvent e) {
 				myQueue.getMyList().remove(0);
 			}
-		});*/
+		});
 
 		
 		JPanel left = new JPanel();

@@ -1,3 +1,4 @@
+package control.comm;
 import java.util.*;
 
 /**
@@ -103,6 +104,10 @@ public class Message {
         b.append("|" + checksum + "}");
         String fullmessage = "{" + seqNum + b.toString();
         return fullmessage;
+    }
+    
+    public void setSeqNum(int seqNum) {
+    	this.seqNum = seqNum;
     }
 }
 
