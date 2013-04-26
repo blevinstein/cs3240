@@ -18,10 +18,10 @@ import javax.swing.JPanel;
 
  /**
  * @author 
- * Brian Levinstein(bpw7xx), 
+ * Brian Levinstein (bpl4ab), 
  * Yuchen Zou (yz2ak), 
  * Neal Milstein (nrm2zf)
- * Bryan Walsh (bpl4ab)
+ * Bryan Walsh (bpw7xx)
  * Alex Weaver (baw4ux)
  */
 
