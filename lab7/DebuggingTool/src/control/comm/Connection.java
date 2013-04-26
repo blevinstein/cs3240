@@ -4,12 +4,19 @@ import lejos.pc.comm.*;
 import java.io.IOException;
 import java.util.*;
 
+import control.gui.DebugInterface;
+
 /**
  * Represents a connection to the NXT base station. Used for communication wiht the base station.
  */
 public class Connection {
   private NXTComm comm; // the private NXTComm object used for communication
   private int seqNum = 0;
+  DebugInterface debug;
+  
+  public Connection(DebugInterface debug) {
+	  this.debug = debug;
+  }
 
   /**
    * Connect to the base station using the hard-coded base station address. Exits if a connection
@@ -73,6 +80,7 @@ public class Connection {
 		  responses.add(new Message(buf.substring(0, buf.indexOf("}") + 1)));
 		  buf.delete(0, buf.indexOf("}") + 1);
 	  }
+	  debug.updateSeqNums(seqNum);
 	  return responses;
   }
   

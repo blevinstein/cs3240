@@ -55,7 +55,7 @@ public class CommandComposer extends JPanel{
 	/**
 	 * JButton object responsible for issuing commands
 	 */
-	private JButton sendCommand;
+	private JButton addCommand;
 	
 	/**
 	 * Default Constructor for CommandComposer
@@ -63,7 +63,7 @@ public class CommandComposer extends JPanel{
 	 * Generates the user interface for selecting commands and their parameters, as well as issuing said commands. 
 	 * When the command selected by {@link CommandComposer#commandList} is changed, 
 	 * the JSpinner will update to allow for the selection of parameters for the newly-selected command.
-	 * Finally, when {@link CommandComposer#sendCommand} is pressed, it will issue the command with the
+	 * Finally, when {@link CommandComposer#addCommand} is pressed, it will issue the command with the
 	 * specified parameters.
 	 */
 	public CommandComposer() {
@@ -138,16 +138,16 @@ public class CommandComposer extends JPanel{
 		
 		
 		// Issue selected command with specified parameters
-		sendCommand = new JButton("Send Command");
-		sendCommand.setFont(new Font("Arial", Font.PLAIN, 14));
-		sendCommand.setPreferredSize(new Dimension(235, 35));
+		addCommand = new JButton("Send Command");
+		addCommand.setFont(new Font("Arial", Font.PLAIN, 14));
+		addCommand.setPreferredSize(new Dimension(235, 35));
 		
 		add(composerLabel);
 		add(commandList);
 		add(params);
 		add(myDegrees);
 		//add(myTimestamp);
-		add(sendCommand);
+		add(addCommand);
 		
 	}
 	
@@ -174,12 +174,12 @@ public class CommandComposer extends JPanel{
 	}*/
 	
 	/**
-	 * Simple Getter for {@link CommandComposer#sendCommand} (JButton object
+	 * Simple Getter for {@link CommandComposer#addCommand} (JButton object
 	 * responsible for issuing commands)
-	 * @return {@link CommandComposer#sendCommand}
+	 * @return {@link CommandComposer#addCommand}
 	 */
-	public JButton getSendButton() {
-		return sendCommand;
+	public JButton getAddButton() {
+		return addCommand;
 	}
 
 }

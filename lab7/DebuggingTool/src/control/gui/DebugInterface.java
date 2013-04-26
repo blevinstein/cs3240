@@ -183,29 +183,31 @@ public class DebugInterface {
 		myResponse = new RobotResponse();
 		
     
-		myComposer.getSendButton().addActionListener(new ActionListener() {
+		myComposer.getAddButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// make command message and add to controller queue
 				// for original programming purposes, print string
 				String selected = (String)myComposer.getCommands().getSelectedItem();
 				
+				
 				System.out.println(selected);
 				
-//				if(selected.equals("Init")) {
+				if(selected.equals("Init")) {
+//					myQueue.addMessage()
 //					myController.addMessage(new CommandMessage(CommandType.INIT));
-//				} else if(selected.equals("Query")) {
+				} else if(selected.equals("Query")) {
 //					myController.addMessage(new CommandMessage(CommandType.QUERY));					
-//				} else if(selected.equals("Quit")) {
+				} else if(selected.equals("Quit")) {
 //					myController.addMessage(new CommandMessage(CommandType.QUIT));					
-//				} else if(selected.equals("Move")) {
+				} else if(selected.equals("Move")) {
 //					myController.addMessage(new CommandMessage(CommandType.MOVE, myComposer.getDegrees().getValue()));
-//				} else if(selected.equals("Turn")) {
+				} else if(selected.equals("Turn")) {
 //					myController.addMessage(new CommandMessage(CommandType.TURN, myComposer.getDegrees().getValue()));
-//				} else if(selected.equals("Claw")) {
+				} else if(selected.equals("Claw")) {
 //					myController.addMessage(new CommandMessage(CommandType.CLAW, ((Integer)myComposer.getDegrees().getValue())/100.0));
-//				} else {
+				} else {
 //					myController.addMessage(new CommandMessage((CommandType.ACK)));
-//				}
+				}
 			}
 		});
 		
@@ -282,6 +284,10 @@ public class DebugInterface {
 	//Unhides DebugInterface GUI
 	public void display() {
 		myFrame.setVisible(true);
+	}
+	
+	public void updateSeqNums(int seqNum) {
+		myQueue.updateMessages(seqNum);
 	}
 	
 	// add response message to print out

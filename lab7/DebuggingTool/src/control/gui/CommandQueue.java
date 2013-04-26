@@ -10,6 +10,8 @@ import java.awt.event.AdjustmentListener;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
+import control.comm.Message;
+
 //import control.communication.CommandMessage;
 
 /**
@@ -34,7 +36,7 @@ public class CommandQueue extends JPanel{
 	/**
 	 * JList object containing names of commands to be executed
 	 */
-	private JList<Object> myQueue;
+	private JList<Message> myQueue;
 	
 	/**
 	 * JButton object responsible for stepping through commands in queue
@@ -54,7 +56,7 @@ public class CommandQueue extends JPanel{
 	/**
 	 * List model for {@link CommandQueue#myQueue}
 	 */
-	private DefaultListModel<Object> myList;
+	private DefaultListModel<Message> myList;
 	
 	/**
 	 * Default constructor for CommandQueue.
@@ -73,10 +75,10 @@ public class CommandQueue extends JPanel{
 		commandLabel.setFont(new Font("Arial", Font.BOLD, 15));
 		
 		// Instantiate myList
-		myList = new DefaultListModel<Object>();
+		myList = new DefaultListModel<Message>();
 		
 		// Instantiate and set style for myQueue
-		myQueue = new JList();
+		myQueue = new JList(myList);
 		myQueue.setFont(new Font("Arial", Font.PLAIN, 13));
 		myQueue.setVisibleRowCount(8);
 		//myQueue.setColumns(15);
@@ -123,13 +125,16 @@ public class CommandQueue extends JPanel{
 		add(sp);
 		add(buttons);
 		
+		Message msg = new Message();
+		msg.pairs.add(new String[] {"init", null} );
+		myList.addElement(msg);
 	}
 	
 	/**
 	 * Simple Getter
 	 * @return {@link CommandQueue#myList} (List model for {@link CommandQueue#myQueue})
 	 */
-	public DefaultListModel<Object> getMyList() {
+	public DefaultListModel<Message> getMyList() {
 		return myList;
 	}
 	
@@ -137,7 +142,7 @@ public class CommandQueue extends JPanel{
 	 * Simple Getter
 	 * @return {@link CommandQueue#myQueue} (JList object containing names of commands to be executed)
 	 */
-	public JList<Object> getQueue() {
+	public JList<Message> getQueue() {
 		return myQueue;
 	}
 	
@@ -164,11 +169,17 @@ public class CommandQueue extends JPanel{
 	public JButton getDelete() {
 		return myDelete;
 	}
+	
+	public void updateMessages(int seqNum) {
+		for (int i=0; i<myList.size(); i++) {
+			myList.get(i).setSeqNum(seqNum);
+			seqNum = seqNum == 0 ? 1 : 0;
+		}
+	}
 
-	//public void addMessage(CommandMessage s) {
-	//	// TODO add command message to displayed JLIST 
-	//	myList.addElement(s.getCommand());
-	//	myQueue.setModel(myList);
-	//}
+	public void addMessage(Message m) {
+		myList.addElement(m);
+		myQueue.setModel(myList);
+	}
 
 }
