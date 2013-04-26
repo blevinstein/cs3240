@@ -74,7 +74,8 @@ public class Controller {
                 Message ack = new Message(message.getSeqNum());
                	
             	if (command.equals("init")){
-            		
+            		System.out.println("Robot is successfully initialized. Proceed to" +
+            				" send commands.")
             	}
             	else if (command.equals("move")){
             		int move = Integer.parseInt(param);
@@ -120,7 +121,7 @@ public class Controller {
             	comm.sendMessage(ack);
             			
             } else {
-            	System.out.println("Awaiting additional commands.");
+            	System.out.println("Command queue empty. Awaiting additional commands.");
                 // queue is empty, do nothing
             }
         }
