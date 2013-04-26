@@ -169,7 +169,7 @@ public class DebugInterface {
 	 */
 	public DebugInterface(/*Controller contr*/) {
 		conn = new Connection(this);
-		conn.connect();
+//		conn.connect();
 		
 		myFrame = new JFrame("ROBOT DEBUGGER");
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -193,7 +193,6 @@ public class DebugInterface {
 				// make command message and add to controller queue
 				// for original programming purposes, print string
 				String selected = (String)myComposer.getCommands().getSelectedItem();
-				System.out.println(selected);
 				
 				Message msg = new Message();
 				String val = myComposer.getDegrees().getValue().toString();
@@ -209,6 +208,8 @@ public class DebugInterface {
 					msg.put("turn", val);
 				} else if(selected.equals("Claw")) {
 					msg.put("claw", val);
+				} else if(selected.equals("Stop")) {
+					msg.put("stop", val);
 				} else {
 					msg.put("ack", null);
 				}
@@ -253,19 +254,33 @@ public class DebugInterface {
 		
 		myVariables.getRequestUpdate().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//
+				
 			}
 		});
 		
 		myQueue.getStep().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				myQueue.getMyList().remove(0);
+				Message msg = (Message)myQueue.getMyList().remove(0);
+				conn.sendMessage(msg);
 			}
 		});
 		
 		myQueue.getDelete().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				myQueue.getMyList().remove(0);
+				if (myQueue.getMyList().size() == 0 || myQueue.getQueue().isSelectionEmpty())
+					return;
+				int[] selected = myQueue.getQueue().getSelectedIndices();
+				for (int i=selected.length - 1; i>=0; i--) {
+					myQueue.getMyList().remove(selected[i]);					
+				}
+				myQueue.updateMessages(conn.getSeqNum());
+				int first = selected[0];
+				if (myQueue.getMyList().size() > 0) {
+					if (first < myQueue.getMyList().size())
+						myQueue.getQueue().setSelectedIndex(first);
+					else
+						myQueue.getQueue().setSelectedIndex(0);
+				}
 			}
 		});
 
