@@ -112,5 +112,9 @@ public class Message {
     public void setSeqNum(int seqNum) {
     	this.seqNum = seqNum;
     }
+    
+    public void put(String a, String b) {
+    	pairs.add(new String[] {a, b});
+    }
 }
 

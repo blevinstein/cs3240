@@ -138,7 +138,7 @@ public class CommandComposer extends JPanel{
 		
 		
 		// Issue selected command with specified parameters
-		addCommand = new JButton("Send Command");
+		addCommand = new JButton("Add Command");
 		addCommand.setFont(new Font("Arial", Font.PLAIN, 14));
 		addCommand.setPreferredSize(new Dimension(235, 35));
 		

@@ -16,6 +16,8 @@ import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import control.comm.*;
+
  /**
  * @author 
  * Brian Levinstein (bpl4ab), 
@@ -44,7 +46,7 @@ public class DebugInterface {
 	private static ProgramVariables myVariables;
 	private static RobotResponse myResponse;
 	
-	//private Controller myController;
+	private Connection conn;
 	
 	private JFrame myFrame;
 	
@@ -188,26 +190,32 @@ public class DebugInterface {
 				// make command message and add to controller queue
 				// for original programming purposes, print string
 				String selected = (String)myComposer.getCommands().getSelectedItem();
-				
-				
 				System.out.println(selected);
 				
+				Message msg = new Message();
+//				String val = myComposer.getDegrees().getValue();
 				if(selected.equals("Init")) {
-//					myQueue.addMessage()
+					msg.put("init", null);
 //					myController.addMessage(new CommandMessage(CommandType.INIT));
 				} else if(selected.equals("Query")) {
+					msg.put("query", null);
 //					myController.addMessage(new CommandMessage(CommandType.QUERY));					
 				} else if(selected.equals("Quit")) {
+					msg.put("quit", null);
 //					myController.addMessage(new CommandMessage(CommandType.QUIT));					
 				} else if(selected.equals("Move")) {
+					msg.put("move", null);
 //					myController.addMessage(new CommandMessage(CommandType.MOVE, myComposer.getDegrees().getValue()));
 				} else if(selected.equals("Turn")) {
+					msg.put("turn", null);
 //					myController.addMessage(new CommandMessage(CommandType.TURN, myComposer.getDegrees().getValue()));
 				} else if(selected.equals("Claw")) {
+					msg.put("claw");
 //					myController.addMessage(new CommandMessage(CommandType.CLAW, ((Integer)myComposer.getDegrees().getValue())/100.0));
 				} else {
 //					myController.addMessage(new CommandMessage((CommandType.ACK)));
 				}
+				myQueue.addMessage(msg);
 			}
 		});
 		
@@ -321,5 +329,4 @@ public class DebugInterface {
 	public CommandQueue getQueue() {
 		return myQueue;
 	}
-
 }
