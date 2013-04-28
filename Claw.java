@@ -55,7 +55,10 @@ public class Claw {
 		motor.rotate(degrees / GEAR_RATIO);
 		angle = motor.getTachoCount();
 	}
-	
+
+  public void setSpeed(int speed) {
+    motor.setSpeed(speed);
+  }
 	
 	/**
 	 * Stops the claw from spinning

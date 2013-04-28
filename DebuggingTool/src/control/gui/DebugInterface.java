@@ -169,7 +169,7 @@ public class DebugInterface {
 	 * Constructor for the DebugInterface. This is where the main GUI is set up 
 	 * and all sub-GUIs belonging to it are created and linked to the DebugInterface
 	 */
-	public DebugInterface(/*Controller contr*/) {
+	public DebugInterface() {
 		conn = new Connection(this);
 //		conn.connect();
 		
@@ -180,8 +180,6 @@ public class DebugInterface {
 		
 		JPanel content = new JPanel();
 		content.setLayout(new GridLayout(1, 2));
-		
-		//myController = contr;
 		
 		myQueue = new CommandQueue();
 		myComposer = new CommandComposer();
