@@ -120,10 +120,9 @@ public class ProgramVariables extends JPanel{
 	 * Updates the values in myVariables and refreshes the JTable object.
 	 * @param an array that contains updated robot variable values.
 	 */
-	public void update(ArrayList<Object> splits) {
-		for(int x = 0; x < myVariables.length; x++) {
-			//model.setValueAt(splits.get(x), x, 1);
-			myVariables[x][1] = splits.get(x);
+	public void update(ArrayList<String[]> splits) {
+		for(int i = 0; i < myVariables.length; i++) {
+			myVariables[i][1] = splits.get(i)[1];
 		}
 		DefaultTableModel model = new DefaultTableModel(myVariables, new String[] {"Variable", "Value"} );
 		myTable.setModel(model);

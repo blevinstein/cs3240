@@ -17,6 +17,8 @@ import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.util.*;
+
 import control.comm.*;
 
  /**
@@ -221,10 +223,9 @@ public class DebugInterface {
 		myOther.getAutonomous().addItemListener( new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(myOther.getAutonomous().isSelected()) {
-					Message msg = new Message();
-					msg.getMap().add(new String[] {"auto", null});
-					conn.sendMessage(msg);
-				}
+					conn.disconnect();
+				} else
+					conn.connect();
 			}
 		});
 		
@@ -254,7 +255,10 @@ public class DebugInterface {
 		
 		myVariables.getRequestUpdate().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Message msg = new Message();
+				msg.put("updt", null);
+				Message resp = conn.sendMessage(msg).get(1);
+				myVariables.update(resp.getMap());
 			}
 		});
 		
@@ -262,6 +266,15 @@ public class DebugInterface {
 			public void actionPerformed(ActionEvent e) {
 				Message msg = (Message)myQueue.getMyList().remove(0);
 				conn.sendMessage(msg);
+			}
+		});
+		
+		myQueue.getExecute().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				while (!myQueue.getMyList().isEmpty()) {
+					Message msg = (Message)myQueue.getMyList().remove(0);
+					conn.sendMessage(msg);
+				}
 			}
 		});
 		
@@ -317,10 +330,9 @@ public class DebugInterface {
 		myQueue.updateMessages(seqNum);
 	}
 	
-	// add response message to print out
-	//public void messageReceived(ResponseMessage r) {
-	//	myResponse.getMyResponses().append("\n" + r.getMessageString());
-	//}
+	public void writeResponse(String resp) {
+		myResponse.getMyResponses().append(resp);
+	}
 	
 	/*public void updateVariables(ResponseMessage r) {
 		// update variables in myVariables

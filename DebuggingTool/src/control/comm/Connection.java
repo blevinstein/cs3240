@@ -16,6 +16,20 @@ public class Connection {
   
   public Connection(DebugInterface debug) {
 	  this.debug = debug;
+	  
+	  comm = null;
+	  // try to create a connection
+	  try
+	  {
+	    comm = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
+	  }
+	  catch (NXTCommException e)
+	  {
+	    // uh oh! could not create it
+	    e.printStackTrace();
+	    System.err.println("Couldn't create NXT comm. Exiting.");
+	    System.exit(-1);
+	  }
   }
 
   /**
@@ -23,22 +37,7 @@ public class Connection {
    * cannot be made.
    * @return the NXTComm connection object
    */
-  public void connect()
-  {
-    comm = null;
-    // try to create a connection
-    try
-    {
-      comm = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
-    }
-    catch (NXTCommException e)
-    {
-      // uh oh! could not create it
-      e.printStackTrace();
-      System.err.println("Couldn't create NXT comm. Exiting.");
-      System.exit(-1);
-    }
-    
+  public void connect() {
     // base station parameters
     NXTInfo info = new NXTInfo();
     info.protocol = NXTCommFactory.BLUETOOTH;
@@ -58,6 +57,16 @@ public class Connection {
           + ". Exiting.");
       System.exit(-2);
     }
+  }
+  
+  public void disconnect() {
+	  try {
+		  comm.close();
+	  } catch (IOException e) {
+		  e.printStackTrace();
+	      System.err.println("Couldn't disconnect to NXT. Exiting.");
+	      System.exit(-2);
+	  }
   }
   
   public List<Message> sendMessage(Message msg) {
@@ -88,7 +97,13 @@ public class Connection {
 		  responses.add(new Message(buf.substring(0, buf.indexOf("}") + 1)));
 		  buf.delete(0, buf.indexOf("}") + 1);
 	  }
+	  
+	  for (Message m : responses) {
+		  debug.writeResponse(m.toString() + "\n");
+	  }
+	  
 	  debug.updateSeqNums(seqNum);
+	  
 	  return responses;
   }
   

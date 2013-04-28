@@ -124,10 +124,6 @@ public class CommandQueue extends JPanel{
 		add(commandLabel);
 		add(sp);
 		add(buttons);
-		
-		Message msg = new Message();
-		msg.pairs.add(new String[] {"init", null} );
-		myList.addElement(msg);
 	}
 	
 	/**
