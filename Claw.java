@@ -11,6 +11,7 @@ public class Claw {
 	
 	private static final int GEAR_RATIO = 3;
 	private static final int MAX_ROTATION_ANGLE = 360;
+	private static final int START_SPEED = 0;
 	
 	/**
 	 * Creates a Claw object to interface with the claw
@@ -55,10 +56,25 @@ public class Claw {
 		motor.rotate(degrees / GEAR_RATIO);
 		angle = motor.getTachoCount();
 	}
-
-  public void setSpeed(int speed) {
-    motor.setSpeed(speed);
-  }
+	
+	/**
+	 * gives the speed of the claw motor
+	 * @return speed of claw motor
+	 */
+	public int getSpeed(){
+		return motor.getSpeed();
+		
+	}
+	
+	public void setSpeed(int speed){
+		motor.setSpeed(speed);
+		if (speed >= START_SPEED) {
+			motor.forward();
+		} else {
+			motor.backward();
+		}
+	}
+	
 	
 	/**
 	 * Stops the claw from spinning

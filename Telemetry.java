@@ -62,7 +62,7 @@ public class Telemetry {
 		telemetry_data.add(Integer.toString(getLight()));
 		telemetry_data.add(Integer.toString(getSound()));
         telemetry_data.add(getTouch() ? "1" : "0");
-		telemetry_data.add(Integer.toString(getUltrasonic()));
+		telemetry_data.add(Integer.toString((int)getUltrasonic()));
 		return telemetry_data;
 	}
 	
@@ -71,7 +71,7 @@ public class Telemetry {
 	 * @return the <code>readNormalizedValue</code> value of the light sensor
 	 */
 	public int getLight(){
-		return light.readNormalizedValue();
+		return light.getLightValue();
 	}
 	
 	/**
@@ -86,8 +86,8 @@ public class Telemetry {
 	 * 
 	 * @return the <code>getdistance</code> value of the ultrasonice sensor
 	 */
-	public int getUltrasonic(){
-		return ultrasonic.getDistance();
+	public float getUltrasonic(){
+		return ultrasonic.getRange();
 	}
 	
 	/**

@@ -15,7 +15,8 @@ public class Controller {
   
     private static final int STOP_SPEED = 0;
     private static final int AUTONOMOUS_SPEED = 180;
-    private static final int AUTONOMOUS_CLAW_SPEED = 120;
+    private static final int AUTONOMOUS_CLAW_SPEED = 360;
+    private static final int SELF_PRESERVATION_SPEED = 360;
   
     /**
      * Constructs a Controller instance with the given port configuration.
@@ -28,20 +29,20 @@ public class Controller {
      * @param sound The port which is connected to the sound sensor.
      */
     public Controller(MotorPort clawPort,
-                      MotorPort leftPort,
-                      MotorPort rightPort,
-                      SensorPort light,
-                      SensorPort touch,
-                      SensorPort ultra,
-                      SensorPort sound) {
-        claw = new Claw(clawPort);
-        movement = new Movement(leftPort, rightPort);
-        telemetry = new Telemetry(light, touch, ultra, sound);
+    				  MotorPort leftPort,
+    				  MotorPort rightPort,
+    				  SensorPort light,
+    				  SensorPort touch,
+    				  SensorPort ultra,
+    				  SensorPort sound) {
+    	claw = new Claw(clawPort);
+    	movement = new Movement(leftPort, rightPort);
+    	telemetry = new Telemetry(light, touch, ultra, sound);
     }
     
     public void autonomousMode(){
-        movement.setSpeed(AUTONOMOUS_SPEED, -AUTONOMOUS_SPEED);
-        claw.setSpeed(AUTONOMOUS_CLAW_SPEED);
+    	movement.setSpeed(AUTONOMOUS_SPEED, -AUTONOMOUS_SPEED);
+    	claw.setSpeed(AUTONOMOUS_CLAW_SPEED);
     }
 
     /**
@@ -54,61 +55,63 @@ public class Controller {
        
         comm.start();
         int initialize_flag = 0;
+        int powd_flag = 0;
         while (true) {
             Message message;
-            List<String> data =    telemetry.getTelemetryData();
+            List<String> data =	telemetry.getTelemetryData();
+            
             if (telemetry.getTouch()){
-                movement.setSpeed(STOP_SPEED, STOP_SPEED);
-                claw.stop();
+            	movement.setSpeed(SELF_PRESERVATION_SPEED, SELF_PRESERVATION_SPEED);
+            	claw.stop();
+            	Thread.sleep(1000);
+            	movement.setSpeed(STOP_SPEED, STOP_SPEED);
             }
             if (!comm.isConnected()) {
-                initialize_flag = 0;
-                autonomousMode();
-            } 
-            
-            else if (comm.hasMessage()) {
-                
-                //if the robot exits autonomous mode, it must stop all motors before 
-                //receiving additional commands
-                ++initialize_flag;
-                if (initialize_flag == 1){
-                    movement.setSpeed(STOP_SPEED, STOP_SPEED);
-                    claw.stop();
-                }
-                
-                
-                message = comm.getMessage();
-                
-                //parse the message
-                
-                   String command = message.pairs.get(0)[0];
-                   String param = message.pairs.get(0)[1];
-                   
+            	initialize_flag = 0;
+            	autonomousMode();
+            } else if (comm.hasMessage()) {
+            	
+            	//if the robot exits autonomous mode, it must stop all motors before 
+            	//receiving additional commands
+            	++initialize_flag;
+            	if (initialize_flag == 1){
+            		movement.setSpeed(STOP_SPEED, STOP_SPEED);
+            		claw.stop();
+            	}
+            	
+            	
+            	message = comm.getMessage();
+            	
+            	//parse the message
+            	
+               	String command = message.pairs.get(0)[0];
+               	String param = message.pairs.get(0)[1];
+               	
                 System.out.println(command);
-                   
+               	
                 Message ack = new Message(message.getSeqNum());
-                   
-                if (command.equals("init")){
-                    System.out.println("Connection established. Send commands.");
-                }
-                else if (command.equals("move")){
-                    int move = Integer.parseInt(param);
-                    movement.setSpeed(move, move);
-                }
-                else if (command.equals("turn")){
-                    int rate = Integer.parseInt(param);
+               	
+            	if (command.equals("init")){
+            		System.out.println("Connection established. Send commands.");
+            	}
+            	else if (command.equals("move")){
+            		int move = Integer.parseInt(param);
+            		movement.setSpeed(move, move);
+            	}
+            	else if (command.equals("turn")){
+            		int rate = Integer.parseInt(param);
                     movement.setSpeed(rate, -rate);
-                }
-                else if (command.equals("claw")){
+            	}
+            	else if (command.equals("claw")){
                     int heading = Integer.parseInt(param);
-                    claw.setSpeed(heading);
-                }
-                else if (command.equals("stop")){
-                    movement.halt();
-                }
-                else if (command.equals("query")) {
-                    // get telemetry data, construct message, comm.send() it
-                    
+            		claw.setSpeed(heading);
+            	}
+            	else if (command.equals("stop")){
+            		movement.halt();
+            	}
+            	else if (command.equals("query")) {
+            		// get telemetry data, construct message, comm.send() it
+            	    
                     Message m = new Message(message.getSeqNum());
                     m.pairs.add(new String[]{"data",null});
                     m.pairs.add(new String[]{"distance", Double.toString(movement.getDistTraveled())});
@@ -120,47 +123,54 @@ public class Controller {
                     m.pairs.add(new String[]{"speed",(movement.getLeftSpeed() + movement.getRightSpeed())/2 + ""});
                     m.pairs.add(new String[]{"ultrasonic",data.get(3)});
                     comm.sendMessage(m);
-                }
-                else if (command.equals("quit")){
-                    System.exit(-1);
-                }
-                else if (command.equals("ack")){
-                    System.out.println("Waiting for additional commands...");
-                }
-                else if (command.equals("halt")){
-                    movement.halt();
-                    claw.stop();
-                }
-                else if (command.equals("powd")){
-                    System.out.println("Powering down...");
-                    Thread.sleep(500);
-                    System.exit(-1);
-                }
-                else if (command.equals("updt")){
-                    Message m = new Message(message.getSeqNum());
-                    m.pairs.add(new String[]{"location", Double.toString(movement.getDistTraveled())});
-                    m.pairs.add(new String[]{"light", data.get(0)});
-                    m.pairs.add(new String[]{"sound", data.get(1)});
-                    m.pairs.add(new String[]{"touch", data.get(2)});
-                    m.pairs.add(new String[]{"claw", claw.getAngle() + ""});
-                    m.pairs.add(new String[]{"heading", Double.toString(movement.getHeading())});
-                    m.pairs.add(new String[]{"speed",(movement.getLeftSpeed() + movement.getRightSpeed())/2 + ""});
-                    m.pairs.add(new String[]{"ultrasonic",data.get(3)});
-                    m.pairs.add(new String[]{"connection", comm.isConnected() + ""});
-                    m.pairs.add(new String[]{"motorA", claw.getSpeed() + ""});
-                    m.pairs.add(new String[]{"motorB", movement.getLeftSpeed() + ""});
-                    m.pairs.add(new String[]{"motorC", movement.getRightSpeed() + ""});
-                    
-                }
-                else{
-                    //not a valid command... 
-                }
-                
-                ack.pairs.add(new String[]{"done", command});
-                comm.sendMessage(ack);
-                        
+            	}
+            	else if (command.equals("quit")){
+            		System.exit(-1);
+            	}
+            	else if (command.equals("ack")){
+            		System.out.println(".");
+            	}
+            	else if (command.equals("halt")){
+            		movement.halt();
+            		claw.stop();
+            	}
+            	else if (command.equals("powd")){
+            		powd_flag = 1;
+            		
+            	}
+            	else if (command.equals("updt")){
+            		ack.pairs.add(new String[]{"location", Double.toString(movement.getDistTraveled())});
+            		ack.pairs.add(new String[]{"light", data.get(0)});
+            		ack.pairs.add(new String[]{"sound", data.get(1)});
+            		ack.pairs.add(new String[]{"touch", data.get(2)});
+            		ack.pairs.add(new String[]{"claw", claw.getAngle() + ""});
+            		ack.pairs.add(new String[]{"heading", Double.toString(movement.getHeading())});
+            		ack.pairs.add(new String[]{"speed",(movement.getLeftSpeed() + movement.getRightSpeed())/2 + ""});
+            		ack.pairs.add(new String[]{"ultrasonic",data.get(3)});
+            		ack.pairs.add(new String[]{"connection", comm.isConnected() + ""});
+            		ack.pairs.add(new String[]{"motorA", claw.getSpeed() + ""});
+            		ack.pairs.add(new String[]{"motorB", movement.getLeftSpeed() + ""});
+            		ack.pairs.add(new String[]{"motorC", movement.getRightSpeed() + ""});
+            		
+            	}
+            	else if (command.equals("auto")){
+            		autonomousMode();
+            	}
+            	else{
+            		//not a valid command... 
+            	}
+            	
+            	ack.pairs.add(0, new String[]{"done", command});
+            	comm.sendMessage(ack);
+            	
+            	if(powd_flag == 1){
+            		System.out.println("Powering down...");
+            		Thread.sleep(500);
+            		System.exit(-1);
+            	}
+            			
             } else {
-                System.out.println("Awaiting additional commands.");
+            	System.out.println("Awaiting additional commands.");
                 // queue is empty, do nothing
             }
         }
