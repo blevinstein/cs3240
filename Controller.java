@@ -56,10 +56,15 @@ public class Controller {
         comm.start();
         int initialize_flag = 0;
         int powd_flag = 0;
+        int danger_flag = 0;
+       
         while (true) {
             Message message;
             List<String> data =	telemetry.getTelemetryData();
-            
+            if (telemetry.getUltrasonic() <= 20){
+            	danger_flag = 1;
+            }
+            //what to do if the robot backs up into something
             if (telemetry.getTouch()){
             	movement.setSpeed(SELF_PRESERVATION_SPEED, SELF_PRESERVATION_SPEED);
             	claw.stop();
@@ -96,7 +101,13 @@ public class Controller {
             	}
             	else if (command.equals("move")){
             		int move = Integer.parseInt(param);
-            		movement.setSpeed(move, move);
+            		if (danger_flag == 1 && move > 0){
+            			System.out.println("DANGER! Cannot move forward.");
+            		}
+            		else{
+            			danger_flag = 0;
+            			movement.setSpeed(move, move);
+            		}
             	}
             	else if (command.equals("turn")){
             		int rate = Integer.parseInt(param);
@@ -124,8 +135,8 @@ public class Controller {
                     m.pairs.add(new String[]{"ultrasonic",data.get(3)});
                     comm.sendMessage(m);
             	}
-            	else if (command.equals("quit")){
-            		System.exit(-1);
+            	else if (command.equals("quit") || command.equals("powd")){
+            		powd_flag = 1;
             	}
             	else if (command.equals("ack")){
             		System.out.println(".");
@@ -133,10 +144,6 @@ public class Controller {
             	else if (command.equals("halt")){
             		movement.halt();
             		claw.stop();
-            	}
-            	else if (command.equals("powd")){
-            		powd_flag = 1;
-            		
             	}
             	else if (command.equals("updt")){
             		ack.pairs.add(new String[]{"location", Double.toString(movement.getDistTraveled())});
@@ -165,12 +172,12 @@ public class Controller {
             	
             	if(powd_flag == 1){
             		System.out.println("Powering down...");
-            		Thread.sleep(500);
+            		Thread.sleep(2000);
             		System.exit(-1);
             	}
             			
             } else {
-            	System.out.println("Awaiting additional commands.");
+            	System.out.println(".");
                 // queue is empty, do nothing
             }
         }
