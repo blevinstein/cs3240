@@ -54,12 +54,7 @@ public class RobotResponse extends JPanel{
 		sp.setPreferredSize(new Dimension(232, 120));
 		
 		DefaultCaret caret = (DefaultCaret)myResponses.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		sp.getVerticalScrollBar().addAdjustmentListener( new AdjustmentListener() {
-			public void adjustmentValueChanged(AdjustmentEvent e) { 
-				e.getAdjustable().setValue( e.getAdjustable().getMaximum()); 
-			} 
-		});		
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);	
 		
 		add(responseLabel);
 		add(sp);

@@ -171,7 +171,7 @@ public class DebugInterface {
 	 */
 	public DebugInterface() {
 		conn = new Connection(this);
-//		conn.connect();
+		conn.connect();
 		
 		myFrame = new JFrame("ROBOT DEBUGGER");
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -221,9 +221,14 @@ public class DebugInterface {
 		myOther.getAutonomous().addItemListener( new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(myOther.getAutonomous().isSelected()) {
-					conn.disconnect();
-				} else
-					conn.connect();
+					Message msg = new Message();
+					msg.put("auto", null);
+					conn.sendMessage(msg);
+				} else {
+					Message msg = new Message();
+					msg.put("halt", null);
+					conn.sendMessage(msg);
+				}
 			}
 		});
 		
@@ -256,6 +261,7 @@ public class DebugInterface {
 				Message msg = new Message();
 				msg.put("updt", null);
 				Message resp = conn.sendMessage(msg).get(1);
+				resp.getMap().remove(0);
 				myVariables.update(resp.getMap());
 			}
 		});
