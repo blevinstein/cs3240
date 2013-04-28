@@ -94,21 +94,21 @@ public class CommandComposer extends JPanel{
 					myDegrees.setEnabled(false);	
 				} else if(command.equals("Move")) {
 					SpinnerModel model = new SpinnerNumberModel(0, -720, 720, 5);
-					myDegrees.setModel(model);
 					myDegrees.setValue(0);
+					myDegrees.setModel(model);
 					try {
 						myDegrees.commitEdit();
 					} catch (ParseException e1) { }
 					myDegrees.setEnabled(true);
 				} else if(command.equals("Turn")) {
 					SpinnerModel model = new SpinnerNumberModel(0, -180, 180, 5);
-					myDegrees.setModel(model);
 					myDegrees.setValue(0);
+					myDegrees.setModel(model);
 					myDegrees.setEnabled(true);
 				} else if(command.equals("Claw")) {
 					SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 100, 5);	
-					myDegrees.setModel(model);
 					myDegrees.setValue(0);
+					myDegrees.setModel(model);
 					myDegrees.setEnabled(true);
 				} else if(command.equals("Stop")) {
 					myDegrees.setEnabled(false);
