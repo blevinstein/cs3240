@@ -52,7 +52,7 @@ public class ProgramVariables extends JPanel{
 		variableLabel.setFont(new Font("Arial", Font.BOLD, 15));
 		
 		String[] cols = {"Variable", "Value"};
-		Object[][] variables = {{"Location", new Integer(5)},{"Light", "50%"}, 
+		Object[][] variables = {{"Distance", new Integer(5)},{"Light", "50%"}, 
 				{"Sound", "15%"}, {"Touch", new Boolean(false)}, {"Claw Position", new Double(.5)},
 				{"Orientation", "N"}, {"Speed", new Integer(5)}, {"Ultrasonic", new Integer(12)}, 
 				{"Connection", new Boolean(true)}, {"Motor A", new Integer(37)},
