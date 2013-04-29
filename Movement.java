@@ -21,8 +21,8 @@ public class Movement {
 	private int RIGHT_ROTATION = 1;
 
     // Constants to allow for calibration of distance and heading calculations.
-    private double DIST_MULTIPLIER = 1;
-    private double HEADING_MULTIPLIER = 1;
+    private double DIST_MULTIPLIER = 1e-8;
+    private double HEADING_MULTIPLIER = 1e-8;
     // The distance traveled and current heading
     private double dist_traveled = 0;
     private double heading = 0;
@@ -70,8 +70,8 @@ public class Movement {
         long elapsed = currentSetSpeed - lastSetSpeed;
         int lastLeftSpeed = left_motor.getSpeed() * LEFT_ROTATION;
         int lastRightSpeed = right_motor.getSpeed() * RIGHT_ROTATION;
-        dist_traveled += (lastLeftSpeed + lastRightSpeed) * elapsed / 2;
-        heading += (lastLeftSpeed - lastRightSpeed) * elapsed / 2;
+        dist_traveled += (lastLeftSpeed + lastRightSpeed) * elapsed * DIST_MULTIPLIER;
+        heading += (lastLeftSpeed - lastRightSpeed) * elapsed * HEADING_MULTIPLIER;
 		
 		left_motor.setSpeed(left_speed);
 		right_motor.setSpeed(right_speed);

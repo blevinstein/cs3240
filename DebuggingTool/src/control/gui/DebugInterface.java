@@ -169,15 +169,15 @@ public class DebugInterface {
 	 * Constructor for the DebugInterface. This is where the main GUI is set up 
 	 * and all sub-GUIs belonging to it are created and linked to the DebugInterface
 	 */
-	public DebugInterface() {
-		conn = new Connection(this);
-		conn.connect();
-		
+	public DebugInterface(/*Controller contr*/) {
 		myFrame = new JFrame("ROBOT DEBUGGER");
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		myFrame.setSize(500, 600);
 		myFrame.setLocation(650, 100);
 		
+        conn = new Connection(this);
+		conn.connect();
+
 		JPanel content = new JPanel();
 		content.setLayout(new GridLayout(1, 2));
 		
@@ -186,8 +186,7 @@ public class DebugInterface {
 		myOther = new OtherCommands();
 		myVariables = new ProgramVariables();
 		myResponse = new RobotResponse();
-		
-    
+
 		myComposer.getAddButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// make command message and add to controller queue
@@ -300,7 +299,6 @@ public class DebugInterface {
 				}
 			}
 		});
-
 		
 		JPanel left = new JPanel();
 		left.setSize(250, 600);
