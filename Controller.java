@@ -14,8 +14,8 @@ public class Controller {
     Telemetry telemetry;
   
     private static final int STOP_SPEED = 0;
-    private static final int AUTONOMOUS_SPEED = 180;
-    private static final int AUTONOMOUS_CLAW_SPEED = 360;
+    private static final int AUTONOMOUS_SPEED = 0;
+    private static final int AUTONOMOUS_CLAW_SPEED = 30;
     private static final int SELF_PRESERVATION_SPEED = 360;
   
     /**
@@ -122,7 +122,10 @@ public class Controller {
             	}
             	else if (command.equals("query")) {
             		// get telemetry data, construct message, comm.send() it
-            	    
+            	  
+                    // update distance travelled and heading
+                    movement.updateDistHeading();
+
                     Message m = new Message(message.getSeqNum());
                     m.pairs.add(new String[]{"data",null});
                     m.pairs.add(new String[]{"distance", Double.toString(movement.getDistTraveled())});
@@ -139,13 +142,16 @@ public class Controller {
             		powd_flag = 1;
             	}
             	else if (command.equals("ack")){
-            		System.out.println(".");
+            		//System.out.println(".");
             	}
             	else if (command.equals("halt")){
             		movement.halt();
             		claw.stop();
             	}
             	else if (command.equals("updt")){
+                    // update distance travelled and heading
+                    movement.updateDistHeading();
+
             		ack.pairs.add(new String[]{"location", Double.toString(movement.getDistTraveled())});
             		ack.pairs.add(new String[]{"light", data.get(0)});
             		ack.pairs.add(new String[]{"sound", data.get(1)});
@@ -177,7 +183,7 @@ public class Controller {
             	}
             			
             } else {
-            	System.out.println(".");
+            	//System.out.println(".");
                 // queue is empty, do nothing
             }
         }

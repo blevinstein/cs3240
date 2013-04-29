@@ -21,11 +21,11 @@ public class Movement {
 	private int RIGHT_ROTATION = 1;
 
     // Constants to allow for calibration of distance and heading calculations.
-    private double DIST_MULTIPLIER = 1e-8;
-    private double HEADING_MULTIPLIER = 1e-8;
+    private double DIST_MULTIPLIER = 60e-8;
+    private double HEADING_MULTIPLIER = 800e-8;
     // The distance traveled and current heading
-    private double dist_traveled = 0;
-    private double heading = 0;
+    private double dist_traveled;
+    private double heading;
 
     // Last time setSpeed was called
     private long lastSetSpeed = 0;
@@ -48,15 +48,28 @@ public class Movement {
 	 * @param rightport the port to use for the right motor
 	 */
 	public Movement(MotorPort leftport, MotorPort rightport){
+
 		left_motor = new NXTRegulatedMotor(leftport);
 		right_motor = new NXTRegulatedMotor(rightport);
 		
 		setSpeed(START_SPEED, START_SPEED);
         lastSetSpeed = System.currentTimeMillis();
+        dist_traveled = 0;
+        heading = 0;
 		
 		setLeftMotorPort(leftport);
 		setRightMotorPort(rightport);
 	}
+
+    public void updateDistHeading() {
+        // Update approximate distance travelled and heading, based on previous motor speeds.
+        long currentSetSpeed = System.currentTimeMillis();
+        long elapsed = currentSetSpeed - lastSetSpeed;
+        int lastLeftSpeed = left_motor.getSpeed() * LEFT_ROTATION;
+        int lastRightSpeed = right_motor.getSpeed() * RIGHT_ROTATION;
+        dist_traveled += (lastLeftSpeed + lastRightSpeed) * elapsed * DIST_MULTIPLIER;
+        heading += (lastLeftSpeed - lastRightSpeed) * elapsed * HEADING_MULTIPLIER;
+    }
 	
 	/**
 	 * Sets the speed of the left and right motor. Negative speed values indicate backwards motion
@@ -65,13 +78,7 @@ public class Movement {
 	 */
 	public void setSpeed(int left_speed, int right_speed){
 
-        // Update approximate distance travelled and heading, based on previous motor speeds.
-        long currentSetSpeed = System.currentTimeMillis();
-        long elapsed = currentSetSpeed - lastSetSpeed;
-        int lastLeftSpeed = left_motor.getSpeed() * LEFT_ROTATION;
-        int lastRightSpeed = right_motor.getSpeed() * RIGHT_ROTATION;
-        dist_traveled += (lastLeftSpeed + lastRightSpeed) * elapsed * DIST_MULTIPLIER;
-        heading += (lastLeftSpeed - lastRightSpeed) * elapsed * HEADING_MULTIPLIER;
+        updateDistHeading();
 		
 		left_motor.setSpeed(left_speed);
 		right_motor.setSpeed(right_speed);
@@ -94,13 +101,11 @@ public class Movement {
 	}
 
     public void setMaxSpeed(){
-    	left_motor.setSpeed(MAX_SPEED);
-    	right_motor.setSpeed(MAX_SPEED);
+        setSpeed(MAX_SPEED, MAX_SPEED);
     }	
 	
     public void halt(){
-    	left_motor.setSpeed(START_SPEED);
-    	right_motor.setSpeed(START_SPEED);
+        setSpeed(START_SPEED, START_SPEED);
     }	
 	
 	
